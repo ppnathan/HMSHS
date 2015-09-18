@@ -1,0 +1,41 @@
+SRC ?= ../../src
+PROB ?= ./
+BUILD ?= ../../build/
+OUTFILES ?= ./OutFiles/
+
+INCDIR = -I$(SRC) -I$(PROB)
+
+SOLVERHDR = $(SRC)Model.h  $(SRC)Belief.h  $(SRC)BeliefSet.h  $(SRC)Utilities.h  $(SRC)NewAlpha.h  $(SRC)NewSolver.h #$(SRC)Alpha.h  $(SRC)Solver.h #$(SRC)NewAlpha.h  $(SRC)NewSolver.h #
+
+SOLVERSRCS = $(SRC)BeliefSet.cc $(SRC)Belief.cc $(SRC)NewAlpha.cc  $(SRC)NewSolver.cc #$(SRC)Alpha.cc  $(SRC)Solver.cc #$(SRC)NewAlpha.cc  $(SRC)NewSolver.cc #
+
+SOLVEROBJ = $(SOLVERSRCS:$(SRC)%.cc=$(BUILD)%.o)
+PROBOBJ = $(MODELSRCS:$(PROB)%.cc=$(BUILD)%.o)
+
+
+TARGETS = $(PROBTARGETS)
+
+all: $(TARGETS)
+
+clean:
+	rm -f *~ *.o *.obj *.a $(TARGETS) $(SOLVEROBJ) $(PROBOBJ)
+
+Solver: $(SOLVERMAIN) $(SOLVEROBJ) $(PROBOBJ)
+	@mkdir -p $(OUTFILES)
+	$(LINK.cc) $^ $(INCDIR) -o $@
+
+Simulator: $(SIMULATORMAIN) $(SOLVEROBJ) $(PROBOBJ)
+	@mkdir -p $(OUTFILES)
+	$(LINK.cc) $^ $(INCDIR) -o $@
+
+BeliefsCollection:$(COLLECTIONMAIN) $(SOLVEROBJ) $(PROBOBJ)
+	@mkdir -p $(OUTFILES)
+	$(LINK.cc) $^ $(INCDIR) -o $@
+
+$(BUILD)%.o : $(SRC)%.cc $(SOLVERHDR)
+	@mkdir -p $(BUILD)
+	$(COMPILE.cc) -MMD $(INCDIR) -o $@ $<
+
+$(BUILD)%.o : $(PROB)%.cc $(SOLVERHDR) $(MODELHDR)
+	@mkdir -p $(BUILD)
+	$(COMPILE.cc) -MMD $(INCDIR) -o $@ $<

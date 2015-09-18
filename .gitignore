@@ -1,0 +1,30 @@
+# Build files
+./build/*
+*.d
+
+# Output files
+./OutFiles/*
+*/OutFiles/*
+*/OutFiles_OldSolver/*
+*.txt
+*.mat
+
+# Files not used
+./NotUsing/*
+
+
+# Figures
+*/figures/*
+*/figures_OldSolver/*
+
+# Compiled files
+*/BeliefsCollection
+*/Solver
+*/Simulator
+*/slprj/*
+*/testsimulink_grt_rtw/*
+
+# Others
+*.dSYM
+.DS_Store
+
