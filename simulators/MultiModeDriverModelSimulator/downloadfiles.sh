@@ -1,0 +1,2 @@
+#scp ppnathan@schubert.eecs.berkeley.edu:~/MyFiles/MURI/HMSHS/Simulator/MultiModeDriverModelSimulator/OutFiles/*.eps ~/Documents/Research/IROS2015/local/figures/
+scp ppnathan@schubert.eecs.berkeley.edu:~/MyFiles/MURI/HMSHS/Simulator/MultiModeDriverModelSimulator/OutFiles/*.eps ./OutFiles
