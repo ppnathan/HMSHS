@@ -1,4 +1,4 @@
-SRC ?= ../../src
+SRC ?= ../../src/
 PROB ?= ./
 BUILD ?= ../../build/
 OUTFILES ?= ./OutFiles/

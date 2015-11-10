@@ -13,7 +13,8 @@ public:
 	
 	void setBelief(const CState& cstate_in, const vector<double> &prob );
 	
-	double BeliefUpdate(const Model& currModel, const DControl& sigma_k, const DObs& zq_next, const CState& zx_next);
+	double BeliefUpdate(const Model& currModel, const DControl& sigma_k, const DObs& zq_next, 
+	                    const CState& zx_next);
 	
 	std::vector<DState> sampleDState(int n);
 	

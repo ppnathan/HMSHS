@@ -12,30 +12,39 @@ typedef struct pos{
 class TwoDModel : public Model
 {
   public:
+	  
       TwoDModel();
       
-      double getCStateTransProb(CState const& x_next, DState const& q_next, CState const& x_k) const;
-      double getDStateTransProb(DState const& q_next, DState const& q_k, DControl const& simga_k) const;
+      double getCStateTransProb(const CState &x_next, const DState &q_next, 
+	                            const CState &x_k) const;
 
-      double getDiscreteObsProb(DObs const& zq_k, DState const& q_k) const;
+      double getDStateTransProb(const DState &q_next, const DState &q_k, 
+	                            const DControl &simga_k) const;
 
-      double getReward(const DState& q, const CState& x, const DControl& sigma) const;
+      double getDiscreteObsProb(const DObs &zq_k, const DState &q_k) const;
 
-	  double getCost(const DState& q, const CState& x, const DControl& sigma) const;
+      double getReward(const DState& q, const CState &x, const DControl &sigma) const;
+
+	  double getCost(const DState& q, const CState &x, const DControl &sigma) const;
 
 
-      double sample(const DState& q_k, const CState& x_k, const DControl& sigma_k, DState& q_next, CState& x_next, DObs& obs_out) const;
+      double sample(const DState &q_k, const CState &x_k, const DControl &sigma_k, 
+	                DState &q_next, CState &x_next, DObs &obs_out) const;
 	  
-	  CState getNextCStateNoNoise(const DState& q_next, const CState& x_k) const;
+	  CState getNextCStateNoNoise(const DState &q_next, const CState &x_k) const;
 
-	  vector<double> get1stDerivative(const DState& q, const CState& x) const;
-
-	  vector<double> get2ndDerivative(const DState& q, const CState& x) const;
+	  MatrixXd get1stDerivative(const DState &q, const CState &x) const;
+	  
+  	  VectorXd getReward1stDeri(const DState &q, const CState &x, const DControl &sigma) const;
+	
+  	  MatrixXd getReward2ndDeri(const DState &q, const CState &x, const DControl &sigma) const;
 	
 	  vector<vector<vector<double> > >  getRewardCoeff() const;
 	  
-	  vector<vector<double> > getCovariance() const;
-          
+	  vector<MatrixXd> getCovariance() const;
+	  
+	  MatrixXd getCovMatrix(const DState &q) const;
+
   private:
       double deltaT;
       double noisemean;
@@ -48,9 +57,9 @@ class TwoDModel : public Model
 
 	  vector<vector<vector<double> > > RewardCoeff; //RewardCoeff[sigma][q][coeff];
 
-	  DState sampleDState(const DState& q, const DControl& sigma) const;
-	  CState sampleCState(const DState& q_next, const CState& x) const;
-	  DObs sampleDObs(const DState& q_next) const;
+	  DState sampleDState(const DState &q, const DControl &sigma) const;
+	  CState sampleCState(const DState &q_next, const CState &x) const;
+	  DObs sampleDObs(const DState &q_next) const;
             
 };
 

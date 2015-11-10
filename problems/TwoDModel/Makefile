@@ -1,5 +1,5 @@
 # Path to the solver source code
-SRC = ../../src
+SRC = ../../src/
 # Path to the problem source code
 PROB = ./
 
