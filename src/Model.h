@@ -88,9 +88,6 @@ private:
 
 protected:
     double discount; 	// discount factor
-
 };
 
 #endif //MODEL_H
-
-

@@ -24,31 +24,31 @@ enum {V00 = 0, V01 = 1, V10 = 2, V11 = 3};
 TwoDModel::TwoDModel() : Model(NumCStateVar_2DMdl, NumDState_2DMdl, NumCObsVar_2DMdl, 
                                NumDObs_2DMdl, NumDControls_2DMdl, Discount_2DMdl),
                     deltaT(1), noisemean(0), awakenoisestddev(0.2), drowsynoisestddev(1), 
-					k1(0.0796), k2(0.4068), obserr(0.05)
+                    k1(0.0796), k2(0.4068), obserr(0.05)
 {
-	                                                  //500 + 0x - x^2 + 0xy + 0y - 0.1y^2
+                                                      //500 + 0x - x^2 + 0xy + 0y - 0.1y^2
     double rewardcoefficient[NumDControls_2DMdl][6] = {{500, 0, -1, 0, 0, -0.1}, 
                                                        {495, 0, -1, 0, 0, -0.1},
                                                        {495, 0, -1, 0, 0, -0.1}, 
-                                                       {490, 0, -1, 0, 0, -0.1}};	
-								  
-	vector<vector<double> > tmpvector(NumDState_2DMdl, vector<double>(6, 0));
+                                                       {490, 0, -1, 0, 0, -0.1}};   
+                                  
+    vector<vector<double> > tmpvector(NumDState_2DMdl, vector<double>(6, 0));
 
     for (int i = 0; i < NumDControls_2DMdl; i++) {
-		for (int j = 0; j < NumDState_2DMdl; j++) {
-        	for (int k = 0; k < 6; k++) {
-            	tmpvector[j][k] = rewardcoefficient[i][k];
-        	}
-		}
+        for (int j = 0; j < NumDState_2DMdl; j++) {
+            for (int k = 0; k < 6; k++) {
+                tmpvector[j][k] = rewardcoefficient[i][k];
+            }
+        }
         RewardCoeff.push_back(tmpvector);
     }
 };
 
 DState TwoDModel::sampleDState(const DState &q, const DControl &sigma) const{
     array<double,4> init = {this->getDStateTransProb(AC0, q, sigma),
-		                    this->getDStateTransProb(AC1, q, sigma), 
+                            this->getDStateTransProb(AC1, q, sigma), 
                             this->getDStateTransProb(DC0, q, sigma),
-							this->getDStateTransProb(DC1, q, sigma)};
+                            this->getDStateTransProb(DC1, q, sigma)};
 
     discrete_distribution<int> distribution(init.begin(), init.end());
 
@@ -67,22 +67,22 @@ CState TwoDModel::sampleCState(const DState &q_next, const CState &x_k) const {
         x_next(0) = (1 - this->deltaT * this->deltaT / 2 * k1) * x_k(0) + 
                     (this->deltaT - this->deltaT * this->deltaT / 2 * k2) * x_k(1) + 
                     awakenoise;
-		x_next(1) = -(this->deltaT) * k1 * x_k(0) + (1 - this->deltaT * k2) * x_k(1);
+        x_next(1) = -(this->deltaT) * k1 * x_k(0) + (1 - this->deltaT * k2) * x_k(1);
     }
     else if (q_next == AC1) {
         x_next(0) = (1 - this->deltaT * this->deltaT / 2 * 2 * k1) * x_k(0) +
                     (this->deltaT - this->deltaT * this->deltaT / 2 * 2 * k2) * x_k(1) +
                     awakenoise;
-		x_next(1) = -(this->deltaT) * 2 * k1 * x_k(0) + (1 - this->deltaT * 2 * k2) * x_k(1);
+        x_next(1) = -(this->deltaT) * 2 * k1 * x_k(0) + (1 - this->deltaT * 2 * k2) * x_k(1);
     }
     else if (q_next == DC0) {
         x_next(0) = x_k(0) + this->deltaT * x_k(1) + drowsynoise;
-		x_next(1) = x_k(1);
+        x_next(1) = x_k(1);
     }
     else if (q_next == DC1) {
         x_next(0) = (1 - this->deltaT * this->deltaT / 2 * k1) * x_k(0) + 
                     (this->deltaT - this->deltaT * this->deltaT / 2 * k2) * x_k(1) + drowsynoise;
-		x_next(1) = -this->deltaT * k1 * x_k(0) + (1 - this->deltaT * k2) * x_k(1);
+        x_next(1) = -this->deltaT * k1 * x_k(0) + (1 - this->deltaT * k2) * x_k(1);
     }
     
     return x_next;
@@ -99,61 +99,61 @@ DObs TwoDModel::sampleDObs(const DState &q_next) const {
 
 double TwoDModel::getCStateTransProb(CState const &x_next, 
                                      DState const &q_next, 
-									 CState const &x_k) const {
-	double difference[2];
+                                     CState const &x_k) const {
+    double difference[2];
     if(q_next == AC0) {
         difference[0] = x_next(0) - (1 - this->deltaT * this->deltaT / 2 * k1) * x_k(0) - 
                         (this->deltaT - this->deltaT * this->deltaT / 2 * k2) * x_k(1);
-		difference[1] = x_next(1)  - (-(this->deltaT) * k1 * x_k(0) + 
-			            (1 - this->deltaT * k2 * x_k(1)));
-		double p1 = 1.0 / (awakenoisestddev * sqrt(2 * PI)) * 
+        difference[1] = x_next(1)  - (-(this->deltaT) * k1 * x_k(0) + 
+                        (1 - this->deltaT * k2 * x_k(1)));
+        double p1 = 1.0 / (awakenoisestddev * sqrt(2 * PI)) * 
                     exp(-0.5 * (difference[0] - noisemean) * (difference[0] - noisemean) /
-						(awakenoisestddev * awakenoisestddev));
-		double p2 = 1.0 / (0.1 * sqrt(2 * PI)) * 
+                        (awakenoisestddev * awakenoisestddev));
+        double p2 = 1.0 / (0.1 * sqrt(2 * PI)) * 
                     exp(-0.5 * (difference[1] - noisemean) * (difference[1] - noisemean) /
-						(0.1 * 0.1));
-		
+                        (0.1 * 0.1));
+        
         return p1 * p2;
 
     }
     else if (q_next == AC1) {
         difference[0] = x_next(0) - (1 - this->deltaT * this->deltaT / 2 * 2 * k1) * x_k(0) -
                         (this->deltaT - this->deltaT * this->deltaT / 2 * 2 * k2) * x_k(1);
-		difference[1] = x_next(1)  - (-this->deltaT * 2 * k1 * x_k(0) +
-			            (1 - this->deltaT* 2 * k2 * x_k(1)));
-		double p1 = 1.0 / (awakenoisestddev * sqrt( 2 * PI)) *
+        difference[1] = x_next(1)  - (-this->deltaT * 2 * k1 * x_k(0) +
+                        (1 - this->deltaT* 2 * k2 * x_k(1)));
+        double p1 = 1.0 / (awakenoisestddev * sqrt( 2 * PI)) *
                     exp(-0.5 * (difference[0] - noisemean) * (difference[0] - noisemean) /
-						(awakenoisestddev * awakenoisestddev));
-		double p2 = 1.0 / (0.1 * sqrt(2 * PI)) *
+                        (awakenoisestddev * awakenoisestddev));
+        double p2 = 1.0 / (0.1 * sqrt(2 * PI)) *
                     exp(-0.5 * (difference[1] - noisemean) * (difference[1] - noisemean) /
-						(0.1 * 0.1));
-		
+                        (0.1 * 0.1));
+        
         return p1*p2;
     }
     else if(q_next == DC0) {
         difference[0] = x_next(0) - x_k(0) - this->deltaT * x_k(1);
-		difference[1] = x_next(1) - x_k(1);
-		double p1 = 1.0 / (drowsynoisestddev * sqrt(2 * PI)) *
+        difference[1] = x_next(1) - x_k(1);
+        double p1 = 1.0 / (drowsynoisestddev * sqrt(2 * PI)) *
                     exp(-0.5 * (difference[0] - noisemean) * (difference[0] - noisemean) /
-						(drowsynoisestddev * drowsynoisestddev));
-		double p2 = 1.0 / (0.1 * sqrt(2 * PI)) *
-			        exp(-0.5 * (difference[1] - noisemean) * (difference[1] - noisemean) /
-						(0.1 * 0.1));
-		
+                        (drowsynoisestddev * drowsynoisestddev));
+        double p2 = 1.0 / (0.1 * sqrt(2 * PI)) *
+                    exp(-0.5 * (difference[1] - noisemean) * (difference[1] - noisemean) /
+                        (0.1 * 0.1));
+        
         return p1*p2;
     }
     else if(q_next == DC1) {
         difference[0] = x_next(0) - (1 - this->deltaT * this->deltaT / 2 * k1) * x_k(0) -
                         (this->deltaT - this->deltaT * this->deltaT / 2 * k2) * x_k(1);
-		difference[1] = x_next(1)  - (-this->deltaT * k1 * x_k(0) +
-			            (1 - this->deltaT * k2 * x_k(1)));
-		double p1 = 1.0 / (drowsynoisestddev * sqrt(2 * PI)) *
+        difference[1] = x_next(1)  - (-this->deltaT * k1 * x_k(0) +
+                        (1 - this->deltaT * k2 * x_k(1)));
+        double p1 = 1.0 / (drowsynoisestddev * sqrt(2 * PI)) *
                     exp(-0.5 * (difference[0] - noisemean) * (difference[0] - noisemean) /
-						(drowsynoisestddev * drowsynoisestddev));
-		double p2 = 1.0 / (0.1 * sqrt(2 * PI)) *
-			        exp(-0.5 * (difference[1] - noisemean) * (difference[1] - noisemean) /
-						(0.1 * 0.1));
-		
+                        (drowsynoisestddev * drowsynoisestddev));
+        double p2 = 1.0 / (0.1 * sqrt(2 * PI)) *
+                    exp(-0.5 * (difference[1] - noisemean) * (difference[1] - noisemean) /
+                        (0.1 * 0.1));
+        
         return p1 * p2;
     }
     else {
@@ -164,7 +164,7 @@ double TwoDModel::getCStateTransProb(CState const &x_next,
 
 double TwoDModel::getDStateTransProb(DState const &q_next, 
                                      DState const &q_k,
-									 DControl const &sigma_k) const {
+                                     DControl const &sigma_k) const {
     double sigma0[2][2] = { {0.95, 0.05}, 
                             {0.05, 0.95} };
     double sigma1[2][2] = { {0.95, 0.8},
@@ -193,21 +193,21 @@ CState TwoDModel::getNextCStateNoNoise(const DState &q_next, const CState &x_k) 
     if(q_next == AC0) {
         x_next(0) = (1- this->deltaT * this->deltaT / 2 * k1) * x_k(0) +
                     (this->deltaT - this->deltaT * this->deltaT / 2 * k2) * x_k(1);
-		x_next(1) = -this->deltaT * k1 * x_k(0) + (1 - this->deltaT * k2) * x_k(1);
+        x_next(1) = -this->deltaT * k1 * x_k(0) + (1 - this->deltaT * k2) * x_k(1);
     }
     else if(q_next == AC1) {
         x_next(0) = (1- this->deltaT * this->deltaT / 2 * 2 * k1) * x_k(0) +
                     (this->deltaT - this->deltaT * this->deltaT / 2 * 2 * k2) * x_k(1);
-		x_next(1) = -this->deltaT * 2 * k1 * x_k(0) + (1 - this->deltaT * 2 * k2) * x_k(1);
+        x_next(1) = -this->deltaT * 2 * k1 * x_k(0) + (1 - this->deltaT * 2 * k2) * x_k(1);
     }
     else if(q_next == DC0) {
         x_next(0) = x_k(0) + this->deltaT * x_k(1);
-		x_next(1) = x_k(1);
+        x_next(1) = x_k(1);
     }
     else if(q_next == DC1) {
         x_next(0) = (1 - this->deltaT * this->deltaT / 2 * k1) * x_k(0) +
                     (this->deltaT - this->deltaT * this->deltaT / 2 * k2) * x_k(1);
-		x_next(1) = -this->deltaT * k1 * x_k(0) + (1 - this->deltaT * k2) * x_k(1);
+        x_next(1) = -this->deltaT * k1 * x_k(0) + (1 - this->deltaT * k2) * x_k(1);
     }
 
     return x_next;
@@ -216,45 +216,45 @@ CState TwoDModel::getNextCStateNoNoise(const DState &q_next, const CState &x_k) 
 MatrixXd TwoDModel::get1stDerivative(const DState &q, const CState &x) const {
     MatrixXd firstderivative(this->getNumCStateVar(), this->getNumCStateVar());
     if(q == AC0) {
-		firstderivative(0, 0) = 1 - this->deltaT * this->deltaT / 2 * k1;
-		firstderivative(0, 1) = this->deltaT - this->deltaT * this->deltaT / 2 * k2;
-		firstderivative(1, 0) = -this->deltaT * k1;
-		firstderivative(1, 1) = 1 - this->deltaT * k2;
-		
+        firstderivative(0, 0) = 1 - this->deltaT * this->deltaT / 2 * k1;
+        firstderivative(0, 1) = this->deltaT - this->deltaT * this->deltaT / 2 * k2;
+        firstderivative(1, 0) = -this->deltaT * k1;
+        firstderivative(1, 1) = 1 - this->deltaT * k2;
+        
         return firstderivative;
     }
     else if(q == AC1) {
-		firstderivative(0, 0) = 1 - (this->deltaT) * (this->deltaT)/ 2 * 2 * k1;
-		firstderivative(0, 1) = this->deltaT - (this->deltaT) * (this->deltaT) / 2 * 2 * k2;
-		firstderivative(1, 0) = -(this->deltaT) * 2 * k1;
-		firstderivative(1, 1) = 1 - (this->deltaT) * 2 * k2;
+        firstderivative(0, 0) = 1 - (this->deltaT) * (this->deltaT)/ 2 * 2 * k1;
+        firstderivative(0, 1) = this->deltaT - (this->deltaT) * (this->deltaT) / 2 * 2 * k2;
+        firstderivative(1, 0) = -(this->deltaT) * 2 * k1;
+        firstderivative(1, 1) = 1 - (this->deltaT) * 2 * k2;
         return firstderivative;
     }
     else if(q == DC0) {
-		firstderivative(0, 0) = 1;
-		firstderivative(0, 1) = this->deltaT;
-		firstderivative(1, 0) = 0;
-		firstderivative(1, 1) = 1;
+        firstderivative(0, 0) = 1;
+        firstderivative(0, 1) = this->deltaT;
+        firstderivative(1, 0) = 0;
+        firstderivative(1, 1) = 1;
         return firstderivative;
     }
     else { //if(q_next == DC1) 
-		firstderivative(0, 0) = 1 - (this->deltaT) * (this->deltaT) / 2 * k1;
-		firstderivative(0, 1) = this->deltaT - (this->deltaT) * (this->deltaT) / 2 * k2;
-		firstderivative(1, 0) = -(this->deltaT) * k1;
-		firstderivative(1, 1) = 1 - (this->deltaT) * k2;
+        firstderivative(0, 0) = 1 - (this->deltaT) * (this->deltaT) / 2 * k1;
+        firstderivative(0, 1) = this->deltaT - (this->deltaT) * (this->deltaT) / 2 * k2;
+        firstderivative(1, 0) = -(this->deltaT) * k1;
+        firstderivative(1, 1) = 1 - (this->deltaT) * k2;
         return firstderivative;
     }
     
 };
 
 double TwoDModel::getReward(const DState &q, const CState &x, const DControl &sigma) const {
-	
-	return (RewardCoeff[sigma][q][0] + 
-		    RewardCoeff[sigma][q][1] * x(0) + 
-			RewardCoeff[sigma][q][2] * x[0] * x[0] +
-		    RewardCoeff[sigma][q][3] * x(0) * x(1) +
-			RewardCoeff[sigma][q][4] * x(1) + 
-			RewardCoeff[sigma][q][2] * x(1) * x(1));
+    
+    return (RewardCoeff[sigma][q][0] + 
+            RewardCoeff[sigma][q][1] * x(0) + 
+            RewardCoeff[sigma][q][2] * x[0] * x[0] +
+            RewardCoeff[sigma][q][3] * x(0) * x(1) +
+            RewardCoeff[sigma][q][4] * x(1) + 
+            RewardCoeff[sigma][q][2] * x(1) * x(1));
     // double R_sigma1[2] = {0,-5};
 //     double R_sigma2[2] = {0,-5};
 //     return (500 - (x(0)*x(0)) - 0.1*(x(1)*x(1))) + R_sigma1[sigma>>1] + R_sigma2[sigma&0x01];
@@ -262,28 +262,28 @@ double TwoDModel::getReward(const DState &q, const CState &x, const DControl &si
 
 VectorXd TwoDModel::getReward1stDeri(const DState &q, const CState &x, 
                                                       const DControl &sigma) const {
-	VectorXd reward1stDeri(this->getNumCStateVar());
-	
-	reward1stDeri(0) = RewardCoeff[sigma][q][1] + 
-		               2 * RewardCoeff[sigma][q][2] * x(0) +
-					   RewardCoeff[sigma][q][3] * x(1);
-	reward1stDeri(1) = RewardCoeff[sigma][q][4] +
-		               2 * RewardCoeff[sigma][q][5] * x(1) +
-					   RewardCoeff[sigma][q][3] * x(0);
+    VectorXd reward1stDeri(this->getNumCStateVar());
+    
+    reward1stDeri(0) = RewardCoeff[sigma][q][1] + 
+                       2 * RewardCoeff[sigma][q][2] * x(0) +
+                       RewardCoeff[sigma][q][3] * x(1);
+    reward1stDeri(1) = RewardCoeff[sigma][q][4] +
+                       2 * RewardCoeff[sigma][q][5] * x(1) +
+                       RewardCoeff[sigma][q][3] * x(0);
 
-	return reward1stDeri;
+    return reward1stDeri;
 }
 
 MatrixXd TwoDModel::getReward2ndDeri(const DState &q, const CState &x, 
                                                       const DControl &sigma) const {
-	MatrixXd Reward2ndDeri(this->getNumCStateVar(), this->getNumCStateVar());
-	
-	Reward2ndDeri(0, 0) = 2 * RewardCoeff[sigma][q][2];
-	Reward2ndDeri(0, 1) = RewardCoeff[sigma][q][3];
-	Reward2ndDeri(1, 0) = RewardCoeff[sigma][q][3];
-	Reward2ndDeri(1, 1) = 2 * RewardCoeff[sigma][q][5];
-	
-	return Reward2ndDeri;
+    MatrixXd Reward2ndDeri(this->getNumCStateVar(), this->getNumCStateVar());
+    
+    Reward2ndDeri(0, 0) = 2 * RewardCoeff[sigma][q][2];
+    Reward2ndDeri(0, 1) = RewardCoeff[sigma][q][3];
+    Reward2ndDeri(1, 0) = RewardCoeff[sigma][q][3];
+    Reward2ndDeri(1, 1) = 2 * RewardCoeff[sigma][q][5];
+    
+    return Reward2ndDeri;
 }
 
 vector<vector<vector<double> > > TwoDModel::getRewardCoeff() const {
@@ -291,41 +291,41 @@ vector<vector<vector<double> > > TwoDModel::getRewardCoeff() const {
 };
 
 vector<MatrixXd> TwoDModel::getCovariance() const {
-	MatrixXd cov_tmp(this->getNumCStateVar(), this->getNumCStateVar());
-	vector<MatrixXd> covariance;
-	for (DState q = 0; q < NumDState_2DMdl; q++) {		
-		if (q >> 1 == 0 ) { //A
-			cov_tmp(0, 0) = awakenoisestddev*awakenoisestddev;
-		}
-		else { //D
-			cov_tmp(0, 0) = drowsynoisestddev*drowsynoisestddev;
-		}
-		cov_tmp(0, 1) = 0;
-		cov_tmp(1, 0) = 0;
-		cov_tmp(1, 1) = 0;
-		
-		covariance.push_back(cov_tmp);
-	}
-	
-	return covariance;
+    MatrixXd cov_tmp(this->getNumCStateVar(), this->getNumCStateVar());
+    vector<MatrixXd> covariance;
+    for (DState q = 0; q < NumDState_2DMdl; q++) {      
+        if (q >> 1 == 0 ) { //A
+            cov_tmp(0, 0) = awakenoisestddev*awakenoisestddev;
+        }
+        else { //D
+            cov_tmp(0, 0) = drowsynoisestddev*drowsynoisestddev;
+        }
+        cov_tmp(0, 1) = 0;
+        cov_tmp(1, 0) = 0;
+        cov_tmp(1, 1) = 0;
+        
+        covariance.push_back(cov_tmp);
+    }
+    
+    return covariance;
 };
 
 MatrixXd TwoDModel::getCovMatrix(const DState &q) const {
-	MatrixXd CovMatrix(this->getNumCStateVar(), this->getNumCStateVar());
-	
-	if (q >> 1 == 0 ) { //A
-		CovMatrix(0, 0) = awakenoisestddev*awakenoisestddev;
-		CovMatrix(0, 1) = 0;
-		CovMatrix(1, 0) = 0;
-		CovMatrix(1, 1) = 0;
-	}
-	else { //D
-		CovMatrix(0, 0) = drowsynoisestddev*drowsynoisestddev;
-		CovMatrix(0, 1) = 0;
-		CovMatrix(1, 0) = 0;
-		CovMatrix(1, 1) = 0;
-	}
-	return CovMatrix; 
+    MatrixXd CovMatrix(this->getNumCStateVar(), this->getNumCStateVar());
+    
+    if (q >> 1 == 0 ) { //A
+        CovMatrix(0, 0) = awakenoisestddev*awakenoisestddev;
+        CovMatrix(0, 1) = 0;
+        CovMatrix(1, 0) = 0;
+        CovMatrix(1, 1) = 0;
+    }
+    else { //D
+        CovMatrix(0, 0) = drowsynoisestddev*drowsynoisestddev;
+        CovMatrix(0, 1) = 0;
+        CovMatrix(1, 0) = 0;
+        CovMatrix(1, 1) = 0;
+    }
+    return CovMatrix; 
 }
 
 // TODO: Not using. Delete later!
@@ -346,9 +346,6 @@ double TwoDModel::sample(const DState &q_k, const CState &x_k, const DControl &s
 //    cout<<"obs_out = "<<obs_out<<endl;
     
     return this->getDStateTransProb(q_next, q_k, sigma_k) *
-		   this->getCStateTransProb(x_next, q_next, x_k) *
-		   this->getDiscreteObsProb(q_next, obs_out);
+           this->getCStateTransProb(x_next, q_next, x_k) *
+           this->getDiscreteObsProb(q_next, obs_out);
 };
-
-
-

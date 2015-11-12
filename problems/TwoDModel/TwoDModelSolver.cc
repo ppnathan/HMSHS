@@ -21,38 +21,38 @@ using namespace std;
 int main(int argc, char** argv) {
     TwoDModel hmshsmodel;
     printf("Model parameters:\n Number of continuous states: %d\n Number of discrete states: %d\n \
-		    Number of continuous obervations: %d\n Number of discrete observations: %d\n \
-			Number of discrete controls: %d\n Discount: %f\n ", 
-	        hmshsmodel.getNumCStateVar(), hmshsmodel.getNumDState(),
-			hmshsmodel.getNumCObsVar(), hmshsmodel.getNumDObs(),
-			hmshsmodel.getNumDControls(), hmshsmodel.getDiscount());
+            Number of continuous obervations: %d\n Number of discrete observations: %d\n \
+            Number of discrete controls: %d\n Discount: %f\n ", 
+            hmshsmodel.getNumCStateVar(), hmshsmodel.getNumDState(),
+            hmshsmodel.getNumCObsVar(), hmshsmodel.getNumDObs(),
+            hmshsmodel.getNumDControls(), hmshsmodel.getDiscount());
         
 #ifdef NEW_SOLVER
 
-        CState initCState = CState::Zero(hmshsmodel.getNumCStateVar());
-		DState initDState = 0;
+    CState initCState = CState::Zero(hmshsmodel.getNumCStateVar());
+    DState initDState = 0;
     
-        int nBeliefs = 5000;
-        int maxIter = 500;
-        double thresholddist = 1;
-        double precision = 1e-5;
+    int nBeliefs = 5000;
+    int maxIter = 500;
+    double thresholddist = 1;
+    double precision = 1e-5;
 
-        printf("\nSolver parameters:\n Number of sampled beliefs: %d\n \
-			    Maximum iteration: %d\n Precision: %f\n", 
-                nBeliefs, maxIter, precision);
+    printf("\nSolver parameters:\n Number of sampled beliefs: %d\n \
+            Maximum iteration: %d\n Precision: %f\n", 
+            nBeliefs, maxIter, precision);
 
-        NewSolver twodmodelsolver(maxIter, precision);
-        cout << "\nDeclared Solver object." << endl;
+    NewSolver twodmodelsolver(maxIter, precision);
+    cout << "\nDeclared Solver object." << endl;
 
-		int start_s = clock();
+    clock_t start_s = clock();
 
-        NewAlphaSet Alpha_sol = 
-			twodmodelsolver.solve(hmshsmodel, initCState, initDState, nBeliefs, thresholddist);
+    NewAlphaSet Alpha_sol = 
+            twodmodelsolver.solve(hmshsmodel, initCState, initDState, nBeliefs, thresholddist);
 
-		int stop_s = clock();
+    clock_t stop_s = clock();
 
-		cout << "\nFinished in " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << endl;
-        cout << "\nFinished!" << endl;
+    cout << "\nFinished in " << (stop_s - start_s) / double(CLOCKS_PER_SEC) << endl;
+    cout << "\nFinished!" << endl;
 
 #endif    
         
@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
     int nBeliefs = 200;
     int maxIter = 1000;
     double precision = 1e-4;
-	
+    
     vector<CObs> zx_samples;
     
     double zx_interval = 10*10;
@@ -80,18 +80,18 @@ int main(int argc, char** argv) {
     }
     
     printf("\nSolver parameters:\n Number of sampled beliefs: %d\n \
-		    Number of sampled observations: %d\n Maximum iteration: %d\n Precision: %f\n", 
+            Number of sampled observations: %d\n Maximum iteration: %d\n Precision: %f\n", 
             nBeliefs, nSamples, maxIter, precision);
         
     Solver twodmodelsolver(maxIter, precision, nSamples);
     cout <<"\nDeclared Solver object." << endl;
-	
-	time_t curr=time(0);
+    
+    time_t curr=time(0);
     cout << "current time is: " << ctime(&curr) << endl;
     AlphaSet Alpha_sol = twodmodelsolver.solve(hmshsmodel, initCState, initDState, nBeliefs,
-	                                           zx_samples, zx_interval);
-	curr = time(0);
-	cout << "current time is: " << ctime(&curr) << endl;
+                                               zx_samples, zx_interval);
+    curr = time(0);
+    cout << "current time is: " << ctime(&curr) << endl;
     cout << "\nFinished!" << endl;
     
 //    const int numBelief = 1000;
@@ -99,7 +99,7 @@ int main(int argc, char** argv) {
 //    sampledBeliefSet.SampleBelief(hmshsmodel, initCState, initDState);
 //    Alpha alphas(hmshsmodel.getNumDState(), nParticle, hmshsmodel.getDiscount());
 #endif
-	
+    
     return 0;
     
 }

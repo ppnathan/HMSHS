@@ -22,8 +22,6 @@ public:
     
     bool isvalid();
 	
-	
-    
     CState cstate;
     vector<double> DStateProb;
 };
