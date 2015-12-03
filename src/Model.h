@@ -36,9 +36,6 @@ public:
 	/*	return R(q,x,sigma)	*/
     virtual double getReward(const DState &q, const CState &x, const DControl &sigma) const = 0;
 
-	/*	return C(q,x,sigma)	*/
-	virtual double getCost(const DState &q, const CState &x, const DControl &sigma) const = 0;
-
 	/*	sample (qq,xx,zq) from Tq(qq|q,sigma), Tx(xx|qq, x)	and Omega(zq|q)*/
     virtual double sample(const DState &q_k, const CState &x_k, const DControl &sigma_k, 
 	                      DState &q_next, CState &x_next, DObs &obs_out) const = 0;
@@ -52,8 +49,6 @@ public:
 	
 	virtual MatrixXd getReward2ndDeri(const DState &q, const CState &x, 
 	                                                   const DControl &sigma) const = 0;
-	
-	virtual vector<vector<vector<double> > >  getRewardCoeff() const = 0;
 	
 	virtual vector<MatrixXd> getCovariance() const = 0; //covariance[q][coeff];
 	

@@ -56,30 +56,26 @@ DState TwoDModel::sampleDState(const DState &q, const DControl &sigma) const{
 };
 
 CState TwoDModel::sampleCState(const DState &q_next, const CState &x_k) const {
-
     normal_distribution<double> awakenormalRand(this->noisemean, this->awakenoisestddev);
     normal_distribution<double> drowsynormalRand(this->noisemean, this->drowsynoisestddev);
     double awakenoise = awakenormalRand(generator);
     double drowsynoise = drowsynormalRand(generator);    
     CState x_next(x_k.size());
-    
+
     if (q_next == AC0) {
         x_next(0) = (1 - this->deltaT * this->deltaT / 2 * k1) * x_k(0) + 
                     (this->deltaT - this->deltaT * this->deltaT / 2 * k2) * x_k(1) + 
                     awakenoise;
         x_next(1) = -(this->deltaT) * k1 * x_k(0) + (1 - this->deltaT * k2) * x_k(1);
-    }
-    else if (q_next == AC1) {
+    } else if (q_next == AC1) {
         x_next(0) = (1 - this->deltaT * this->deltaT / 2 * 2 * k1) * x_k(0) +
                     (this->deltaT - this->deltaT * this->deltaT / 2 * 2 * k2) * x_k(1) +
                     awakenoise;
         x_next(1) = -(this->deltaT) * 2 * k1 * x_k(0) + (1 - this->deltaT * 2 * k2) * x_k(1);
-    }
-    else if (q_next == DC0) {
+    } else if (q_next == DC0) {
         x_next(0) = x_k(0) + this->deltaT * x_k(1) + drowsynoise;
         x_next(1) = x_k(1);
-    }
-    else if (q_next == DC1) {
+    } else if (q_next == DC1) {
         x_next(0) = (1 - this->deltaT * this->deltaT / 2 * k1) * x_k(0) + 
                     (this->deltaT - this->deltaT * this->deltaT / 2 * k2) * x_k(1) + drowsynoise;
         x_next(1) = -this->deltaT * k1 * x_k(0) + (1 - this->deltaT * k2) * x_k(1);
@@ -220,7 +216,6 @@ MatrixXd TwoDModel::get1stDerivative(const DState &q, const CState &x) const {
         firstderivative(0, 1) = this->deltaT - this->deltaT * this->deltaT / 2 * k2;
         firstderivative(1, 0) = -this->deltaT * k1;
         firstderivative(1, 1) = 1 - this->deltaT * k2;
-        
         return firstderivative;
     }
     else if(q == AC1) {
@@ -251,7 +246,7 @@ double TwoDModel::getReward(const DState &q, const CState &x, const DControl &si
     
     return (RewardCoeff[sigma][q][0] + 
             RewardCoeff[sigma][q][1] * x(0) + 
-            RewardCoeff[sigma][q][2] * x[0] * x[0] +
+            RewardCoeff[sigma][q][2] * x(0) * x(0) +
             RewardCoeff[sigma][q][3] * x(0) * x(1) +
             RewardCoeff[sigma][q][4] * x(1) + 
             RewardCoeff[sigma][q][2] * x(1) * x(1));
@@ -272,7 +267,7 @@ VectorXd TwoDModel::getReward1stDeri(const DState &q, const CState &x,
                        RewardCoeff[sigma][q][3] * x(0);
 
     return reward1stDeri;
-}
+};
 
 MatrixXd TwoDModel::getReward2ndDeri(const DState &q, const CState &x, 
                                                       const DControl &sigma) const {
@@ -284,10 +279,6 @@ MatrixXd TwoDModel::getReward2ndDeri(const DState &q, const CState &x,
     Reward2ndDeri(1, 1) = 2 * RewardCoeff[sigma][q][5];
     
     return Reward2ndDeri;
-}
-
-vector<vector<vector<double> > > TwoDModel::getRewardCoeff() const {
-    return RewardCoeff;
 };
 
 vector<MatrixXd> TwoDModel::getCovariance() const {
@@ -326,13 +317,6 @@ MatrixXd TwoDModel::getCovMatrix(const DState &q) const {
         CovMatrix(1, 1) = 0;
     }
     return CovMatrix; 
-}
-
-// TODO: Not using. Delete later!
-double TwoDModel::getCost(const DState &q, const CState &x, const DControl &sigma) const {
-    double R_sigma1[2] = {0, 5};
-    double R_sigma2[2] = {0, 5};
-    return x(0) * x(0) + R_sigma1[sigma >> 1] + R_sigma2[sigma & 0x01];
 };
 
 double TwoDModel::sample(const DState &q_k, const CState &x_k, const DControl &sigma_k,

@@ -10,8 +10,11 @@ public:
 	BeliefSet(int n = 0): numBeliefs(n) {};
     
     
-    void SampleBelief(const Model& currModel, const CState& initCState, const DState& initDState,
-	                  const vector<double>& initQprob, int maxPath = 100);
+    void SampleBelief(const Model& currModel, const CState& x_init_mean, 
+	                  const vector<double>& initQprob, int maxPath = 100, 
+					  bool (*stoppingCriteria)(const Model&, const CState &, 
+					                                         const DState&) = NULL, 
+					  CState (*getInitCState)(const Model&, const CState &) = NULL);
     
     std::list<Belief> bset;
 

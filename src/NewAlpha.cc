@@ -20,7 +20,7 @@ NewAlpha::NewAlpha(int nDState, int nCState, double discount_factor) :
 
 double NewAlpha::getdist(const CState& x1, const CState& x2) {
     VectorXd diff = x1 - x2;
-    return sqrt(diff.squaredNorm());
+    return diff.norm();
 };
 
 double NewAlpha::AlphaValue(const DState& q, const CState& x) const {
@@ -95,15 +95,17 @@ void NewAlpha::calCoeff(const Model& currModel, NewAlphaSet& alphaset,
             MatrixXd firstderi = currModel.get1stDerivative(qq, currBelief.cstate);
 
             for (int zq = 0; zq < currModel.getNumDObs(); zq++) {
-                NewAlpha& alpha_star = alphaset[optalpha[sigma_star][zq]];
+                const NewAlpha& alpha_star = alphaset[optalpha[sigma_star][zq]];
                 constterm += currModel.getDiscreteObsProb(zq, qq) *
                              alpha_star.ExpectedAlphaValue(qq, x_next, cov[qq]) *
                              currModel.getDStateTransProb(qq, q, sigma_star);
+				
                 firstorderterm += currModel.getDiscreteObsProb(zq, qq) *
                                   currModel.getDStateTransProb(qq, q, sigma_star) *
                                   (firstderi.transpose() * alpha_star.mCoeff[qq][1] +
                                    2 * firstderi.transpose() * alpha_star.mCoeff[qq][2] *
                                    (x_next - alpha_star.mLocalx));
+				
                 secondorderterm += currModel.getDiscreteObsProb(zq, qq) *
                                    currModel.getDStateTransProb(qq, q, sigma_star) *
                                    (2 * firstderi.transpose() * alpha_star.mCoeff[qq][2] *
@@ -130,7 +132,6 @@ double NewAlpha::backup(const Model& currModel, NewAlphaSet& alphaset, Belief& c
 
     DControl sigma_star;
     double J_star = -DBL_MAX; // for reward
-//    double J_star = DBL_MAX;     // for cost
     vector<MatrixXd> covariance = currModel.getCovariance();
 
     //-------------------------------End Initialization------------------------------------------
@@ -142,26 +143,22 @@ double NewAlpha::backup(const Model& currModel, NewAlphaSet& alphaset, Belief& c
         J_sigma[DCrl] = 0;
 
         for (DObs zq = 0; zq < currModel.getNumDObs(); zq++) {
-
-            indivmaxvalue= -DBL_MAX; //999999999; // for reward
+            indivmaxvalue = -DBL_MAX; // for reward
             double numalphaselected = 0;
+			CState meanx_next_wrt_opt;
             for (int j = 0; j < alphaset.size(); j++) {   // may not loop through the \alpha set
                 if (getdist(alphaset[j].mLocalx, currBelief.cstate) < thresholddist) {
-//              if((getdist(currModel.getNextCStateNoNoise(0, currBelief.cstate),
-//                   alphaset[j].mLocalx) < thresholddist) ||
-//              (getdist(currModel.getNextCStateNoNoise(1, currBelief.cstate),
-//                  alphaset[j].mLocalx) < thresholddist) )
-
                     numalphaselected++;
 
                     double sum_qq = 0;
+					CState meanx_next;
                     for (int qq = 0; qq < numDState; qq++) {
                         double sum_q = 0;
                         for (int q = 0; q < numDState; q++) {
                             sum_q += currModel.getDStateTransProb(qq, q, DCrl) *
                                      currBelief.DStateProb[q];
                         }
-                        CState meanx_next = currModel.getNextCStateNoNoise(qq, currBelief.cstate);
+                        meanx_next = currModel.getNextCStateNoNoise(qq, currBelief.cstate);
                         sum_qq += alphaset[j].ExpectedAlphaValue(qq, meanx_next, covariance[qq]) *
                                   currModel.getDiscreteObsProb(zq, qq) *
                                   sum_q;
@@ -170,23 +167,25 @@ double NewAlpha::backup(const Model& currModel, NewAlphaSet& alphaset, Belief& c
                     if (sum_qq > indivmaxvalue) {
                         indivmaxvalue = sum_qq;
                         optalpha[DCrl][zq] = j;
+						meanx_next_wrt_opt = meanx_next;
                     }
                 }
             }
 
-            cout << "zq = " << zq << "; numalphaselected = " << numalphaselected << endl;
-
+            cout << "zq = " << zq << "; numalphaselected = " << numalphaselected
+				 << "; optimal alpha = " << optalpha[DCrl][zq] << endl;
+			cout << "meanx_next_wrt_opt = (" << meanx_next_wrt_opt.transpose() << ")" << endl;
             J_sigma[DCrl] += indivmaxvalue;
-//                cout<< indivmaxvalue<<"   "<<eta[DCrl][i]<<endl;
         }
 
         J_sigma[DCrl] *= gamma;
 
-//      cout<<"J_sigma["<<DCrl<<"]  = "<<J_sigma[DCrl]<<endl;
+        cout << "J_sigma[" << DCrl << "]  = " << J_sigma[DCrl] << endl;
 
-        for (int i = 0; i < currModel.getNumDState(); i++)
+        for (int i = 0; i < currModel.getNumDState(); i++) {
             J_sigma[DCrl] += currModel.getReward(i, currBelief.cstate, DCrl) *
                              currBelief.DStateProb[i];
+		}
 
         if (J_sigma[DCrl] > J_star) {
             J_star = J_sigma[DCrl];
@@ -198,15 +197,14 @@ double NewAlpha::backup(const Model& currModel, NewAlphaSet& alphaset, Belief& c
     this->mLocalx = currBelief.cstate;
     optimalalphaidx.clear();
 
-    for (int zq = 0; zq < currModel.getNumDObs(); zq++)
+    for (int zq = 0; zq < currModel.getNumDObs(); zq++) {
         optimalalphaidx.push_back(optalpha[sigma_star][zq]);
+	}
 
     //----------------------------End finding optimal sigma------------------------------------
 
     // Calculate mCoeff
     calCoeff(currModel, alphaset, optalpha, sigma_star, currBelief);
-
-    cout<<"test3"<<endl;
 
     return J_star;
 

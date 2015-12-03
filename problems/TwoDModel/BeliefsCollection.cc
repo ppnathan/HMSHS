@@ -12,10 +12,7 @@ int main(int argc, char** argv) {
     TwoDModel hmshsmodel;
     int nBeliefs = 10000;
     
-    CState initCState(hmshsmodel.getNumCStateVar());
-	for (int i = 0; i < hmshsmodel.getNumCStateVar(); i++) {
-		initCState(i) = 0;
-	}
+    CState initCState = CState::Zero(hmshsmodel.getNumCStateVar());
     
 	//CState initCState(hmshsmodel.getNumCStateVar(), 0);
 	

@@ -32,7 +32,7 @@ void getBeliefsSet(char beliefsFile[], const Model& currModel,
 
 double getdist(const CState& x1, const CState& x2) {
     VectorXd diff = x1 - x2;
-    return sqrt(diff.squaredNorm());
+    return diff.norm();
 };
 
 void writepolicyfile(char filename[], const NewAlphaSet& alphaset) {
@@ -62,11 +62,13 @@ void writepolicyfile(char filename[], const NewAlphaSet& alphaset) {
 //         cout << "NewSolver.writepolicyfile() check point 4\n";
            
            policyfile << it->mCoeff[i][0] << "  ";
+//		   cout << "it->mCoeff[i][0] = " << it->mCoeff[i][0] << endl; 
 //         cout << "NewSolver.writepolicyfile() check point 5\n";
            // Write first order term:
            for (int j  = 0; j < it->mCoeff[i][1].rows(); j++) {
                policyfile << it->mCoeff[i][1](j) << "  ";  
            }
+//		   cout << "it->mCoeff[i][1] = " << it->mCoeff[i][1] << endl; 
 //         cout << "NewSolver.writepolicyfile() check point 6\n";
            // Write second order term:
            for (int j  = 0; j < it->mCoeff[i][2].cols(); j++) {
@@ -74,6 +76,7 @@ void writepolicyfile(char filename[], const NewAlphaSet& alphaset) {
                    policyfile << it->mCoeff[i][2](k, j) << "  ";  
                }
            }
+//		   cout << "it->mCoeff[i][2] = " << it->mCoeff[i][2] << endl; 
 
            policyfile << endl;
        }
@@ -137,12 +140,12 @@ int RuleOutAllImprovedBeliefs(const Model& currModel, const NewAlpha& newalpha, 
                 
     while(it_belief != newBeliefs.end()) {
         double dist = getdist(it_belief->cstate, newalpha.mLocalx);
-        cout << "dist between (" << it_belief->cstate(0) << "," << newalpha.mLocalx(0)
+        cout << "dist between (" << it_belief->cstate(0) << ", " << newalpha.mLocalx(0)
              << ") = " << dist << endl;
         if (dist < thresholdDist) {
-            double Jvaluewithnewalpha = newalpha.calvalue(currModel, *it_belief);
-            if (Jvaluewithnewalpha - *it_bestvalue >= -1e-6) {
-                cout << "Jvaluewithnewalpha = " << Jvaluewithnewalpha << endl;
+            double JValueWithNewAlpha = newalpha.calvalue(currModel, *it_belief);
+            if (JValueWithNewAlpha - *it_bestvalue >= -1e-6) {
+                cout << "Jvaluewithnewalpha = " << JValueWithNewAlpha << endl;
                 it_belief = newBeliefs.erase(it_belief);
                 it_bestvalue = bestValueSet.erase(it_bestvalue);
                 it_alphaidx = bestAlphaIdx.erase(it_alphaidx);
@@ -168,17 +171,16 @@ int RuleOutAllImprovedBeliefs(const Model& currModel, const NewAlpha& newalpha, 
 void PrintAllAlphasToDebugFile(const Model& currModel, const NewAlphaSet& alphaset, 
                                ofstream& debugfile) {
     debugfile << "\n\nnumber of alpha = " << alphaset.size() << ": ";
-//        CState xtmp(currModel.getNumCStateVar(), 0);
     for (int i = 0; i < alphaset.size(); i++) {
         debugfile << "[" << i << "]";
         debugfile << "(" << alphaset[i].mSigma << ", [";
         for (int j = 0; j < alphaset[i].mLocalx.size(); j++) {
-            debugfile << alphaset[i].mLocalx(j) << ",";
+            debugfile << alphaset[i].mLocalx(j) << ", ";
         }
         debugfile << "]: ";
             
         for (int j = 0; j < currModel.getNumDState(); j++) {
-            debugfile << alphaset[i].AlphaValue(j, alphaset[i].mLocalx) << ",";
+            debugfile << alphaset[i].AlphaValue(j, alphaset[i].mLocalx) << ", ";
         }
         debugfile << ")   ";
     }
@@ -223,11 +225,11 @@ bool CalculateAndWriteBestValueForBeliefs(char lastResultsFilePath[],
     double value;
     double bestvalue;
     int bestalphaidx;
-        
+
     list<double>::iterator it_bestvalue = bestValueSetCopy.begin();
     bool finished  = true;
     int count = 0;
-        
+
     ofstream debugfile_last;
     debugfile_last.open(lastResultsFilePath);
     debugfile << "\n" << iter << "  ";
@@ -276,13 +278,13 @@ NewAlphaSet NewSolver::solve(const Model& currModel, const CState& initCState,
                              const DState& initDState, int numBeliefs, double thresholdDist) {
     ofstream debugfile;
     ofstream bestvaluefile;
-    
+
     debugfile.open("OutFiles/SolverDebug.txt");
     bestvaluefile.open("OutFiles/BestValue.txt");
     char policyfilename[] = "OutFiles/policyfile.txt";
     char debugfile_lastResultPath[] = "OutFiles/SolverDebug_Last.txt";
     char beliefsSelectionFilePath[] = "OutFiles/BeliefsSelection.txt";
-    
+
     BeliefSet RandomBeliefs(numBeliefs);
     getBeliefsSet(beliefsSelectionFilePath, currModel, numBeliefs, RandomBeliefs);
     
@@ -305,11 +307,11 @@ NewAlphaSet NewSolver::solve(const Model& currModel, const CState& initCState,
         bestValueSet.push_back(J_zero);
         bestValueSetCopy.push_back(J_zero);
         
-        debugfile << "[" << count << "]" << J_zero << "   ";
+        debugfile << "[" << count << "]" << J_zero << "[" << newalpha.mSigma << "]   ";
         bestvaluefile << J_zero << "   ";
         count++;
     }
-    debugfile << endl;
+    debugfile << "\n\n===================================================================\n\n";
     bestvaluefile << currModel.getNumDControls() << endl;
     
     //------------------Perseus iteration begins------------------------------
@@ -362,7 +364,7 @@ NewAlphaSet NewSolver::solve(const Model& currModel, const CState& initCState,
                 
                 UpdatedAlphaSet.push_back(newalpha);
                 debugfile << "(sigma=" << newalpha.mSigma << " from alphas(" << optimalalphaidx[0]
-                          << "," << optimalalphaidx[1] << "))   ";
+                          << "))   ";
                 numNewAlpha++;
             }
             else {
