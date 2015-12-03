@@ -20,10 +20,10 @@ Belief getbelief(const Model& currModel, const Belief& currbelief, const DContro
         for (int j = 0; j < currModel.getNumDState(); j++){
             tmp += currModel.getDStateTransProb(i, j, sigma_k) * currbelief.DStateProb[j];
         }
-//		cout << "[" << i << "]" << tmp << endl;
-//		cout << "[" << i << "]" << currModel.getCStateTransProb(zx_next, i, currbelief.cstate) 
-//			 << endl;
-		
+//      cout << "[" << i << "]" << tmp << endl;
+//      cout << "[" << i << "]" << currModel.getCStateTransProb(zx_next, i, currbelief.cstate) 
+//           << endl;
+        
         b_next.DStateProb.push_back(currModel.getDiscreteObsProb(zq_next, i) * 
                                     currModel.getCStateTransProb(zx_next, i, currbelief.cstate) * 
                                     tmp );
@@ -52,15 +52,15 @@ Outputs:   <return>
 */
 void BeliefSet::SampleBelief(const Model& currModel, const CState& x_init, 
                              const vector<double>& initQprob, int maxPath, 
-	   					     bool (*stoppingCriteria)(const Model&, const CState &, 
-	   					                                            const DState&),
-							 CState (*getInitCState)(const Model&, const CState &)) {
-	CState x_sample;
-	if (getInitCState != NULL) {
-    	x_sample = getInitCState(currModel, x_init);
-	} else {
-		x_sample = x_init;
-	}
+                             bool (*stoppingCriteria)(const Model&, const CState &, 
+                                                                    const DState&),
+                             CState (*getInitCState)(const Model&, const CState &)) {
+    CState x_sample;
+    if (getInitCState != NULL) {
+        x_sample = getInitCState(currModel, x_init);
+    } else {
+        x_sample = x_init;
+    }
     discrete_distribution<int> q_init_distribution(initQprob.begin(), initQprob.end());
     DState q_sample = q_init_distribution(generator);
 
@@ -79,7 +79,7 @@ void BeliefSet::SampleBelief(const Model& currModel, const CState& x_init,
         myfile << q_sample << "  ";
     }
 
-	int pathLen = 0;
+    int pathLen = 0;
     for(int i = 0; i < numBeliefs - 1; i++) { // the first belief is initial belief
         int sigma = uniformintRand(generator) % currModel.getNumDControls(); // generate random control;
 //        int sigma = 0; // Always no control
@@ -101,19 +101,19 @@ void BeliefSet::SampleBelief(const Model& currModel, const CState& x_init,
             myfile << zq_next << "  ";
         }
 
-		pathLen++;
+        pathLen++;
 
         if ((pathLen > maxPath) || 
-		    (stoppingCriteria != NULL && stoppingCriteria(currModel, x_next, q_next))) {
-			if (getInitCState != NULL) {
-		    	x_sample = getInitCState(currModel, x_init);
-			} else {
-				x_sample = x_init;
-			}
+            (stoppingCriteria != NULL && stoppingCriteria(currModel, x_next, q_next))) {
+            if (getInitCState != NULL) {
+                x_sample = getInitCState(currModel, x_init);
+            } else {
+                x_sample = x_init;
+            }
             q_sample = q_init_distribution(generator);
             b_sample.cstate = x_sample;
             b_sample.DStateProb = initQprob;
-			pathLen = 0;
+            pathLen = 0;
         }
         else {
             x_sample = x_next;

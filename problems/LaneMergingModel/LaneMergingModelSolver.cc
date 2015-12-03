@@ -17,7 +17,7 @@ Number of discrete controls: %d\n Discount: %f\n ",
             hmshsmodel.getNumCObsVar(), hmshsmodel.getNumDObs(),
             hmshsmodel.getNumDControls(), hmshsmodel.getDiscount());
 
-	// TODO: Modifying this
+    // TODO: Modifying this
     CState initCState = CState::Zero(hmshsmodel.getNumCStateVar());
     DState initDState = 0;
     
@@ -36,7 +36,7 @@ Maximum iteration: %d\n Precision: %f\n", nBeliefs, maxIter, precision);
 
     NewAlphaSet Alpha_sol = 
             laneMergingModelSolver.solve(hmshsmodel, initCState, initDState, nBeliefs, 
-	                                     thresholddist);
+                                         thresholddist);
 
     clock_t stop_s = clock();
 

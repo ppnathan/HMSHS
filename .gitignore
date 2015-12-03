@@ -8,6 +8,9 @@
 *.txt
 *.mat
 
+# Temp files
+*.m~
+
 # Files not used
 **/NotUsing/*
 

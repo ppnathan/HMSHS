@@ -16,32 +16,32 @@ Belief::Belief(const Belief& b) {
 }
 
 void Belief::setBelief(const CState& cstate_in, const vector<double> &prob ) {
-	cstate = cstate_in;
+    cstate = cstate_in;
     DStateProb = prob;
 };
 
 double Belief::normalize() {
-	double sum = 0;
-	for(int i = 0; i < DStateProb.size(); i++) {
-		sum += DStateProb[i];
-	}
+    double sum = 0;
+    for(int i = 0; i < DStateProb.size(); i++) {
+        sum += DStateProb[i];
+    }
 
-	if(sum!=0) {
-		for(int i = 0; i < DStateProb.size(); i++) {
-			DStateProb[i] = DStateProb[i] / sum;
-		}
-		return 1/sum;
-	}
-	else {
-		return 0;
-	}
+    if(sum!=0) {
+        for(int i = 0; i < DStateProb.size(); i++) {
+            DStateProb[i] = DStateProb[i] / sum;
+        }
+        return 1/sum;
+    }
+    else {
+        return 0;
+    }
 }
 
 bool Belief::isvalid() {
-	double sum = 0;
+    double sum = 0;
     for(int i = 0; i < DStateProb.size(); i++) {
         sum += DStateProb[i];
-	}
+    }
 
     return (sum - 1.0) < 1e-6;
 };
@@ -83,8 +83,8 @@ double Belief::BeliefUpdate(const Model& currModel, const DControl& sigma_k,
             tmp += currModel.getDStateTransProb(qq, q, sigma_k) * this->DStateProb[q];
         }
         qProb.push_back(currModel.getDiscreteObsProb(zq_next, qq) * 
-			            currModel.getCStateTransProb(zx_next, qq, this->cstate) * 
-					    tmp );
+                        currModel.getCStateTransProb(zx_next, qq, this->cstate) * 
+                        tmp );
     }
     
     this->cstate = zx_next;
