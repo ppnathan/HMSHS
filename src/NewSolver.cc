@@ -274,8 +274,7 @@ bool CalculateAndWriteBestValueForBeliefs(char lastResultsFilePath[],
     return finished;
 };
 
-NewAlphaSet NewSolver::solve(const Model& currModel, const CState& initCState, 
-                             const DState& initDState, int numBeliefs, double thresholdDist) {
+NewAlphaSet NewSolver::solve(const Model& currModel, int numBeliefs, double thresholdDist) {
     ofstream debugfile;
     ofstream bestvaluefile;
 

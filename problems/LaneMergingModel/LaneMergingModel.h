@@ -14,6 +14,7 @@ class LaneMergingModel : public Model
   public:
 
       LaneMergingModel();
+	  LaneMergingModel(double rewardParam);
 
       double getCStateTransProb(const CState &x_next, const DState &q_next,
                                 const CState &x_k) const;
@@ -48,8 +49,7 @@ class LaneMergingModel : public Model
       double mSafeDist;
       double mReactionDist;
 
-//      double c;
-//      double mObsErr;
+      double mRewardParam;
 
       vector<vector<vector<double> > > RewardCoeff; //RewardCoeff[sigma][q][coeff];
 

@@ -9,8 +9,7 @@ class NewSolver {
 
 public:
     NewSolver(int maxIt, double _precision) : maxIter(maxIt), mPrecision(_precision) {};
-    NewAlphaSet solve(const Model& currModel, const CState& initCState, const DState& initDState,
-                      int numBeliefs, double thresholddist);
+    NewAlphaSet solve(const Model& currModel, int numBeliefs, double thresholddist);
 
 private:
     int maxIter;

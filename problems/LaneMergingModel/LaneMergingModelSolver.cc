@@ -9,23 +9,30 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    LaneMergingModel hmshsmodel;
+
+	double rewardParam = 0.1;
+    int nBeliefs = 10000;
+    int maxIter = 500;
+    double thresholdDist = 10;
+    double precision = 1e-5;
+
+	if (argc >= 2) rewardParam = atof(argv[1]);
+	if (argc >= 3) nBeliefs = stoi(argv[2]);
+	if (argc >= 4) maxIter = stoi(argv[3]);
+	if (argc >= 5) thresholdDist = atof(argv[4]);
+
+    LaneMergingModel hmshsModel(rewardParam);
     printf("Model parameters:\n Number of continuous states: %d\n Number of discrete states: %d\n \
 Number of continuous obervations: %d\n Number of discrete observations: %d\n \
 Number of discrete controls: %d\n Discount: %f\n ", 
-            hmshsmodel.getNumCStateVar(), hmshsmodel.getNumDState(),
-            hmshsmodel.getNumCObsVar(), hmshsmodel.getNumDObs(),
-            hmshsmodel.getNumDControls(), hmshsmodel.getDiscount());
+            hmshsModel.getNumCStateVar(), hmshsModel.getNumDState(),
+            hmshsModel.getNumCObsVar(), hmshsModel.getNumDObs(),
+            hmshsModel.getNumDControls(), hmshsModel.getDiscount());
 
     // TODO: Modifying this
-    CState initCState = CState::Zero(hmshsmodel.getNumCStateVar());
-    DState initDState = 0;
+//    CState initCState = CState::Zero(hmshsModel.getNumCStateVar());
+//    DState initDState = 0;
     
-    int nBeliefs = 10000;
-    int maxIter = 500;
-    double thresholddist = 10;
-    double precision = 1e-5;
-
     printf("\nSolver parameters:\n Number of sampled beliefs: %d\n \
 Maximum iteration: %d\n Precision: %f\n", nBeliefs, maxIter, precision);
 
@@ -35,8 +42,7 @@ Maximum iteration: %d\n Precision: %f\n", nBeliefs, maxIter, precision);
     clock_t start_s = clock();
 
     NewAlphaSet Alpha_sol = 
-            laneMergingModelSolver.solve(hmshsmodel, initCState, initDState, nBeliefs, 
-                                         thresholddist);
+            laneMergingModelSolver.solve(hmshsModel, nBeliefs, thresholdDist);
 
     clock_t stop_s = clock();
 

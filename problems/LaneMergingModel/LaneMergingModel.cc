@@ -26,11 +26,15 @@ enum {OBLIVIOUS = 0, IMPATIENT = 1, COURTEOUS = 2, REASONABLE = 3};
 // sigma: C0:(u = 0); C1:(u = 1); C2:(u = -1);
 enum {C0 = 0, C1 = 1, C2 = 2}; 
 
-LaneMergingModel::LaneMergingModel() : Model(NumCStateVar_LMMdl, NumDState_LMMdl, NumCObsVar_LMMdl, 
+LaneMergingModel::LaneMergingModel() {
+	LaneMergingModel(0.1);
+};
+
+LaneMergingModel::LaneMergingModel(double rewardParam) : Model(NumCStateVar_LMMdl, NumDState_LMMdl, NumCObsVar_LMMdl, 
                                NumDObs_LMMdl, NumDControls_LMMdl, Discount_LMMdl),
                     mDeltaT(0.1), mNoiseMean(0), mDistNoiseStd(0.1), mVelNoiseStd(0.1),
                     mSafeDist(7), mReactionDist(25) {
-
+    mRewardParam = rewardParam;
 };
 
 DState LaneMergingModel::sampleDState(const DState &q, const DControl &sigma) const{
@@ -233,7 +237,7 @@ double LaneMergingModel::getReward(const DState &q, const CState &x, const DCont
         } else if (x(2) - x(0) > mSafeDist && x(2) - x(0) < mSafeDist + 1) {
             return maxReward * (x(2) - x(0) - mSafeDist);
         } else if (x(2) > 0) {
-            return maxReward + 0.2*x(2)*x(2);
+            return maxReward + mRewardParam * x(2) * x(2);
         }
         
         return maxReward;
@@ -264,7 +268,7 @@ VectorXd LaneMergingModel::getReward1stDeri(const DState &q, const CState &x,
             reward1stDeri(0) = -maxReward;
             reward1stDeri(2) = maxReward;
         } else if (x(2) > 0) {
-            reward1stDeri(2) = 0.2*x(2);
+            reward1stDeri(2) = mRewardParam * x(2);
         }
     }
 
@@ -282,7 +286,7 @@ MatrixXd LaneMergingModel::getReward2ndDeri(const DState &q, const CState &x,
         } else if (x(2) - x(0) > mSafeDist && x(2) - x(0) < mSafeDist + 1) {
             // do nothing
         } else if (x(2) > 0) {
-            Reward2ndDeri(2, 2) = 0.2;
+            Reward2ndDeri(2, 2) = mRewardParam;
         }
     }
     // if (max(x(0), x(2)) < 0 ) {
