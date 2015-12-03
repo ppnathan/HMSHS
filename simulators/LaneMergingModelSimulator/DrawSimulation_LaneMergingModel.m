@@ -23,14 +23,14 @@ q_sim(1)
 figureposition = [0 500 2048 300]; figurelinewidth = 1.5; figurefontsize = 40; markersize = 8;
 savedir = './figures/';
 
-% draw (x_t(1), x_t(3))
+% draw (x_t(1) - x_t(3))
 figure('Position', figureposition)
-plot(x_sim(:, 1), 'k', 'LineWidth', figurelinewidth+0.5); hold on;
-plot(x_sim(:, 3), 'b', 'LineWidth', figurelinewidth+0.5); hold on;
+plot(x_sim(:, 1) - x_sim(:, 3), 'k', 'LineWidth', figurelinewidth+0.5); hold on;
+%plot(x_sim(:, 3), 'b', 'LineWidth', figurelinewidth+0.5); hold on;
 xlabel('t', 'FontSize', figurefontsize);
 ylabel('Position', 'FontSize', figurefontsize);
 %title('x(t)', 'FontSize', figurefontsize);hold on;
-legend('x_1(t)', 'x_2(t)', 'Location', [.9,.7,.1,.2]);
+%legend('x_1(t)', 'x_2(t)', 'Location', [.9,.7,.1,.2]);
 set(gca, 'FontSize', figurefontsize);
 savepath = [savedir 'positions.png'];
 set(gcf,'PaperPositionMode','auto'); print(gcf, '-dpng', savepath);
@@ -172,11 +172,12 @@ end
 if(1)
     
 figure('Position', figureposition)
-change_lane_pos = -30;
+change_lane_pos = -50;
+left_most_pos = -500;
 for i = 1:size(x_sim, 1)
-    plot([-350, change_lane_pos], [0, 0], 'y--', 'LineWidth', figurelinewidth + 3); hold on;
-    plot([-350, 50], [2, 2], 'k--', 'LineWidth', figurelinewidth + 3);
-    plot([-350, change_lane_pos], [-2, -2], 'k--', 'LineWidth', figurelinewidth + 3);
+    plot([left_most_pos, change_lane_pos], [0, 0], 'k--', 'LineWidth', figurelinewidth + 3); hold on;
+    plot([left_most_pos, 50], [2, 2], 'k--', 'LineWidth', figurelinewidth + 3);
+    plot([left_most_pos, change_lane_pos], [-2, -2], 'k--', 'LineWidth', figurelinewidth + 3);
     plot([change_lane_pos, 0], [-2, 0], 'k--', 'LineWidth', figurelinewidth + 3);
     plot([0, 50], [0, 0], 'k--', 'LineWidth', figurelinewidth + 3);
     length_car = 7;

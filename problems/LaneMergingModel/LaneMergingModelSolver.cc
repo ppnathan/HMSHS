@@ -21,7 +21,7 @@ Number of discrete controls: %d\n Discount: %f\n ",
     CState initCState = CState::Zero(hmshsmodel.getNumCStateVar());
     DState initDState = 0;
     
-    int nBeliefs = 5000;
+    int nBeliefs = 10000;
     int maxIter = 500;
     double thresholddist = 10;
     double precision = 1e-5;

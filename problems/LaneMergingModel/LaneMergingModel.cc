@@ -233,7 +233,7 @@ double LaneMergingModel::getReward(const DState &q, const CState &x, const DCont
         } else if (x(2) - x(0) > mSafeDist && x(2) - x(0) < mSafeDist + 1) {
             return maxReward * (x(2) - x(0) - mSafeDist);
         } else if (x(2) > 0) {
-            return maxReward + x(2);
+            return maxReward + 0.2*x(2)*x(2);
         }
         
         return maxReward;
@@ -264,7 +264,7 @@ VectorXd LaneMergingModel::getReward1stDeri(const DState &q, const CState &x,
             reward1stDeri(0) = -maxReward;
             reward1stDeri(2) = maxReward;
         } else if (x(2) > 0) {
-            reward1stDeri(2) = 1;
+            reward1stDeri(2) = 0.2*x(2);
         }
     }
 
@@ -282,7 +282,7 @@ MatrixXd LaneMergingModel::getReward2ndDeri(const DState &q, const CState &x,
         } else if (x(2) - x(0) > mSafeDist && x(2) - x(0) < mSafeDist + 1) {
             // do nothing
         } else if (x(2) > 0) {
-            Reward2ndDeri(2, 2) = 0;
+            Reward2ndDeri(2, 2) = 0.2;
         }
     }
     // if (max(x(0), x(2)) < 0 ) {

@@ -132,9 +132,9 @@ int main(int argc, char** argv) {
     double thresholdDist = 6;
 
     CState x_k(hmshsModel.getNumCStateVar());
-    x_k(0) = -300;
+    x_k(0) = -460;
     x_k(1) = 30;
-    x_k(2) = -303;
+    x_k(2) = -500;
     x_k(3) = 30;
     
     DState q_k = 3;
