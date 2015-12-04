@@ -47,6 +47,17 @@ DState LaneMergingModel::sampleDState(const DState &q, const DControl &sigma) co
 };
 
 CState LaneMergingModel::sampleCState(const DState &q_next, const CState &x_k) const {
+	CState x_next(this->getNumCStateVar());
+	
+    if (max(x_k(0), x_k(2)) > 0 && abs(x_k(0) - x_k(2)) < mSafeDist) {
+	    x_next(0) = x_k(0);
+	    x_next(1) = x_k(1);
+	    x_next(2) = x_k(2);
+	    x_next(3) = x_k(3);
+		
+		return x_next;
+    }
+	
     int humanDriver = q_next / 3;
     int autonomousDriver = q_next % 3;
     double humanInput, autonomousInput;
@@ -90,7 +101,7 @@ CState LaneMergingModel::sampleCState(const DState &q_next, const CState &x_k) c
     double distNoise4AutonomousDriver = distNormalRand4AutonomousDriver(generator);
     double velNoise4AutonomousDriver = velNormalRand4AutonomousDriver(generator); 
        
-    CState x_next(this->getNumCStateVar());
+    
     
     x_next(0) = x_k(0) + mDeltaT * x_k(1) + distNoise4HumanDriver;
     x_next(1) = x_k(1) + mDeltaT * humanInput + velNoise4HumanDriver;
@@ -139,11 +150,18 @@ double LaneMergingModel::getCStateTransProb(const CState & x_next,
         printf("LaneMergingModel::getCStateTransProb(): q_next out of domain\n");
         exit(1);
     }
-    
-    difference[0] = x_next(0) - (x_k(0) + mDeltaT * x_k(1));
-    difference[1] = x_next(1) - (x_k(1) + mDeltaT * humanInput);
-    difference[2] = x_next(2) - (x_k(2) + mDeltaT * x_k(3));
-    difference[3] = x_next(3) - (x_k(3) + mDeltaT * autonomousInput);
+
+    if (max(x_k(0), x_k(2)) > 0 && abs(x_k(0) - x_k(2)) < mSafeDist) {
+        difference[0] = x_next(0) - x_k(0);
+        difference[1] = x_next(1) - x_k(1);
+        difference[2] = x_next(2) - x_k(2);
+        difference[3] = x_next(3) - x_k(3);
+    } else {
+        difference[0] = x_next(0) - (x_k(0) + mDeltaT * x_k(1));
+        difference[1] = x_next(1) - (x_k(1) + mDeltaT * humanInput);
+        difference[2] = x_next(2) - (x_k(2) + mDeltaT * x_k(3));
+        difference[3] = x_next(3) - (x_k(3) + mDeltaT * autonomousInput);
+    }
     
     double p1 = 1.0 / (mDistNoiseStd * sqrt(2 * PI)) * 
                 exp(-0.5 * (difference[0] - mNoiseMean) * (difference[0] - mNoiseMean) /
@@ -176,6 +194,16 @@ double LaneMergingModel::getDiscreteObsProb(const DObs &zq_k, const DState &q_k)
 };
 
 CState LaneMergingModel::getNextCStateNoNoise(const DState &q_next, const CState &x_k) const {
+	CState x_next(this->getNumCStateVar());
+	if (max(x_k(0), x_k(2)) > 0 && abs(x_k(0) - x_k(2)) < mSafeDist) {
+        x_next(0) = x_k(0);
+        x_next(1) = x_k(1);
+        x_next(2) = x_k(2);
+        x_next(3) = x_k(3);
+		
+		return x_next;
+	}
+	
     int humanDriver = q_next / 3;
     int autonomousDriver = q_next % 3;
     double humanInput, autonomousInput;
@@ -207,8 +235,6 @@ CState LaneMergingModel::getNextCStateNoNoise(const DState &q_next, const CState
         printf("LaneMergingModel::getNextCStateNoNoise(): q_next out of domain\n");
         exit(1);
     }
-    
-    CState x_next(this->getNumCStateVar());
 
     x_next(0) = x_k(0) + mDeltaT * x_k(1);
     x_next(1) = x_k(1) + mDeltaT * humanInput;
@@ -220,10 +246,17 @@ CState LaneMergingModel::getNextCStateNoNoise(const DState &q_next, const CState
 
 MatrixXd LaneMergingModel::get1stDerivative(const DState &q, const CState &x) const {
     MatrixXd firstderivative(this->getNumCStateVar(), this->getNumCStateVar());
-    firstderivative << 1, mDeltaT, 0, 0,
-                       0, 1,       0, 0,
-                       0, 0,       1, mDeltaT ,
-                       0, 0,       0, 1;
+	if (max(x(0), x(2)) > 0 && abs(x(0) - x(2)) < mSafeDist) {
+        firstderivative << 1, 0, 0, 0,
+                           0, 1, 0, 0,
+                           0, 0, 1, 0,
+                           0, 0, 0, 1;
+	} else {
+        firstderivative << 1, mDeltaT, 0, 0,
+                           0, 1,       0, 0,
+                           0, 0,       1, mDeltaT,
+                           0, 0,       0, 1;
+	}
     
     return firstderivative;
 };
@@ -325,7 +358,7 @@ MatrixXd LaneMergingModel::getCovMatrix(const DState &q) const {
     cov_tmp(2, 2) = mDistNoiseStd * mDistNoiseStd;
     cov_tmp(3, 3) = mVelNoiseStd * mVelNoiseStd;
     
-    return cov_tmp; 
+    return cov_tmp;
 };
 
 double LaneMergingModel::sample(const DState &q_k, const CState &x_k, const DControl &sigma_k,

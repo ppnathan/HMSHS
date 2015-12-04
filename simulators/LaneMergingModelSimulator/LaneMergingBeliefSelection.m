@@ -72,6 +72,9 @@ for i = 1:nSelection
 end
 
 fclose(BeliefsSelectionFile);
+
+closePositionIdx = find(abs(RawBeliefsData(2, selectedIdx) - RawBeliefsData(4, selectedIdx))< 10 & ...
+    RawBeliefsData(2, selectedIdx) > -30);
 % RawBeliefsData(2:5, selectedIdx(1))
 % for i = 1:nSelection
 %     if norm(RawBeliefsData(2:5, selectedIdx(i)) - RawBeliefsData(2:5, selectedIdx(1))) < 6

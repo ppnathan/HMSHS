@@ -135,7 +135,7 @@ int main(int argc, char** argv) {
     x_k(0) = -460;
     x_k(1) = 30;
     x_k(2) = -500;
-    x_k(3) = 30;
+    x_k(3) = 28;
     
     DState q_k = 3;
     DObs zq_k = 0;

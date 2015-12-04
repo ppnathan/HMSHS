@@ -11,7 +11,15 @@ using namespace std;
 
 bool LaneMergingModelstoppingCriteria(const Model& currModel, const CState & x, 
                                                               const DState& q) {
-    return (max(x(0), x(2)) > 30 );
+    if (max(x(0), x(2)) > 30) {
+    	return true;
+    }
+	double safeDist = 7;
+	if (max(x(0), x(2)) > 0 && abs(x(0) - x(2)) < safeDist) {
+		return true;
+	}
+	
+	return false;
 }
 
 CState LaneMergingModelGetInitCState(const Model& currModel, const CState & x) {

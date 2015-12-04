@@ -173,13 +173,14 @@ if(1)
     
 figure('Position', figureposition)
 change_lane_pos = -50;
-left_most_pos = -500;
+left_most_pos = -510;
 for i = 1:size(x_sim, 1)
     plot([left_most_pos, change_lane_pos], [0, 0], 'k--', 'LineWidth', figurelinewidth + 3); hold on;
     plot([left_most_pos, 50], [2, 2], 'k--', 'LineWidth', figurelinewidth + 3);
     plot([left_most_pos, change_lane_pos], [-2, -2], 'k--', 'LineWidth', figurelinewidth + 3);
     plot([change_lane_pos, 0], [-2, 0], 'k--', 'LineWidth', figurelinewidth + 3);
     plot([0, 50], [0, 0], 'k--', 'LineWidth', figurelinewidth + 3);
+    set(gca,'XLim', [left_most_pos 50]);
     length_car = 7;
     width_car = 0.4;
     
