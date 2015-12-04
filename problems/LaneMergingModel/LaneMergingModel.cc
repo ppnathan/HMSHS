@@ -26,8 +26,11 @@ enum {OBLIVIOUS = 0, IMPATIENT = 1, COURTEOUS = 2, REASONABLE = 3};
 // sigma: C0:(u = 0); C1:(u = 1); C2:(u = -1);
 enum {C0 = 0, C1 = 1, C2 = 2}; 
 
-LaneMergingModel::LaneMergingModel() {
-	LaneMergingModel(0.1);
+LaneMergingModel::LaneMergingModel() : Model(NumCStateVar_LMMdl, NumDState_LMMdl, NumCObsVar_LMMdl, 
+                               NumDObs_LMMdl, NumDControls_LMMdl, Discount_LMMdl),
+                    mDeltaT(0.1), mNoiseMean(0), mDistNoiseStd(0.1), mVelNoiseStd(0.1),
+                    mSafeDist(7), mReactionDist(25){
+	mRewardParam = 0.1;
 };
 
 LaneMergingModel::LaneMergingModel(double rewardParam) : Model(NumCStateVar_LMMdl, NumDState_LMMdl, NumCObsVar_LMMdl, 
