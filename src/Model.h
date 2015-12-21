@@ -53,6 +53,8 @@ public:
     virtual vector<MatrixXd> getCovariance() const = 0; //covariance[q][coeff];
     
     virtual MatrixXd getCovMatrix(const DState &q) const = 0;
+	
+	virtual bool satisfyConstraints(const DState &q, const CState &x) const = 0;
         
     /*  return The number of continuous state variables */
     inline int getNumCStateVar() const { return numCStateVar; }

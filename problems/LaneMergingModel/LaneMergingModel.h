@@ -7,7 +7,7 @@ typedef struct pos{
     double x;
     double v;
     pos(double _x = 0, double _v = 0): x(_x), v(_v) {}
-}pos;
+} pos;
 
 class LaneMergingModel : public Model
 {
@@ -40,6 +40,8 @@ class LaneMergingModel : public Model
       vector<MatrixXd> getCovariance() const;
 
       MatrixXd getCovMatrix(const DState &q) const;
+	  
+	  bool satisfyConstraints(const DState &q, const CState &x) const;
 
   private:
       double mDeltaT;

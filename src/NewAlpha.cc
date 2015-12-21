@@ -92,25 +92,28 @@ void NewAlpha::calCoeff(const Model& currModel, NewAlphaSet& alphaset,
 
         for (int qq = 0; qq < currModel.getNumDState(); qq++) {
             CState x_next = currModel.getNextCStateNoNoise(qq, currBelief.cstate);
-            MatrixXd firstderi = currModel.get1stDerivative(qq, currBelief.cstate);
+			
+			if (currModel.satisfyConstraints(qq, x_next)) {
+                MatrixXd firstderi = currModel.get1stDerivative(qq, currBelief.cstate);
 
-            for (int zq = 0; zq < currModel.getNumDObs(); zq++) {
-                const NewAlpha& alpha_star = alphaset[optalpha[sigma_star][zq]];
-                constterm += currModel.getDiscreteObsProb(zq, qq) *
-                             alpha_star.ExpectedAlphaValue(qq, x_next, cov[qq]) *
-                             currModel.getDStateTransProb(qq, q, sigma_star);
-				
-                firstorderterm += currModel.getDiscreteObsProb(zq, qq) *
-                                  currModel.getDStateTransProb(qq, q, sigma_star) *
-                                  (firstderi.transpose() * alpha_star.mCoeff[qq][1] +
-                                   2 * firstderi.transpose() * alpha_star.mCoeff[qq][2] *
-                                   (x_next - alpha_star.mLocalx));
-				
-                secondorderterm += currModel.getDiscreteObsProb(zq, qq) *
-                                   currModel.getDStateTransProb(qq, q, sigma_star) *
-                                   (2 * firstderi.transpose() * alpha_star.mCoeff[qq][2] *
-                                    firstderi);
-            }
+                for (int zq = 0; zq < currModel.getNumDObs(); zq++) {
+                    const NewAlpha& alpha_star = alphaset[optalpha[sigma_star][zq]];
+                    constterm += currModel.getDiscreteObsProb(zq, qq) *
+                                 alpha_star.ExpectedAlphaValue(qq, x_next, cov[qq]) *
+                                 currModel.getDStateTransProb(qq, q, sigma_star);
+				    
+                    firstorderterm += currModel.getDiscreteObsProb(zq, qq) *
+                                      currModel.getDStateTransProb(qq, q, sigma_star) *
+                                      (firstderi.transpose() * alpha_star.mCoeff[qq][1] +
+                                       2 * firstderi.transpose() * alpha_star.mCoeff[qq][2] *
+                                       (x_next - alpha_star.mLocalx));
+				    
+                    secondorderterm += currModel.getDiscreteObsProb(zq, qq) *
+                                       currModel.getDStateTransProb(qq, q, sigma_star) *
+                                       (2 * firstderi.transpose() * alpha_star.mCoeff[qq][2] *
+                                        firstderi);
+                }
+		    }
         }
 
         mCoeff[q][0](0, 0) = constterm * gamma +
@@ -153,15 +156,18 @@ double NewAlpha::backup(const Model& currModel, NewAlphaSet& alphaset, Belief& c
                     double sum_qq = 0;
 					CState meanx_next;
                     for (int qq = 0; qq < numDState; qq++) {
-                        double sum_q = 0;
-                        for (int q = 0; q < numDState; q++) {
-                            sum_q += currModel.getDStateTransProb(qq, q, DCrl) *
-                                     currBelief.DStateProb[q];
-                        }
-                        meanx_next = currModel.getNextCStateNoNoise(qq, currBelief.cstate);
-                        sum_qq += alphaset[j].ExpectedAlphaValue(qq, meanx_next, covariance[qq]) *
-                                  currModel.getDiscreteObsProb(zq, qq) *
-                                  sum_q;
+						meanx_next = currModel.getNextCStateNoNoise(qq, currBelief.cstate);
+						if (currModel.satisfyConstraints(qq, meanx_next)) {
+                            double sum_q = 0;
+                            for (int q = 0; q < numDState; q++) {
+                                sum_q += currModel.getDStateTransProb(qq, q, DCrl) *
+                                         currBelief.DStateProb[q];
+                            }
+						
+                            sum_qq += alphaset[j].ExpectedAlphaValue(qq, meanx_next, covariance[qq]) *
+                                      currModel.getDiscreteObsProb(zq, qq) *
+                                      sum_q;
+						}
                     }
 
                     if (sum_qq > indivmaxvalue) {

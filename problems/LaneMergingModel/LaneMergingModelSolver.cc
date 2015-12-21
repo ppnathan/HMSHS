@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
 	double rewardParam = 0.1;
     int nBeliefs = 5000;
     int maxIter = 500;
-    double thresholdDist = 10;
+    double thresholdDist = 5;
     double precision = 1e-5;
 
 	if (argc >= 2) rewardParam = atof(argv[1]);
@@ -32,7 +32,7 @@ Number of discrete controls: %d\n Discount: %f\n ",
     // TODO: Modifying this
 //    CState initCState = CState::Zero(hmshsModel.getNumCStateVar());
 //    DState initDState = 0;
-    
+
     printf("\nSolver parameters:\n Number of sampled beliefs: %d\n \
 Maximum iteration: %d\n Precision: %f\n", nBeliefs, maxIter, precision);
 

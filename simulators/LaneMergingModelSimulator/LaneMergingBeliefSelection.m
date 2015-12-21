@@ -24,7 +24,7 @@ for i = 1:K
     findidx{i} = find(IDX == i);
 end
 
-nSelection = 10000;
+nSelection = 50000;
 selectedIdx = zeros(nSelection, 1);
 
 
@@ -47,7 +47,7 @@ while( i<=nSelection)
 end
 
 figure;
-plot(RawBeliefsData(2, selectedIdx), RawBeliefsData(4, selectedIdx), '.');
+plot(RawBeliefsData(2, selectedIdx(1:10000)), RawBeliefsData(4, selectedIdx(1:10000)), '.');
 
 count = 0;
 BeliefsSelectionFile = fopen('../../problems/LaneMergingModel/OutFiles/BeliefsSelection.txt', 'w');

@@ -29,14 +29,14 @@ enum {C0 = 0, C1 = 1, C2 = 2};
 LaneMergingModel::LaneMergingModel() : Model(NumCStateVar_LMMdl, NumDState_LMMdl, NumCObsVar_LMMdl, 
                                NumDObs_LMMdl, NumDControls_LMMdl, Discount_LMMdl),
                     mDeltaT(0.1), mNoiseMean(0), mDistNoiseStd(0.1), mVelNoiseStd(0.1),
-                    mSafeDist(7), mReactionDist(25){
+                    mSafeDist(12), mReactionDist(25){
 	mRewardParam = 0.1;
 };
 
 LaneMergingModel::LaneMergingModel(double rewardParam) : Model(NumCStateVar_LMMdl, NumDState_LMMdl, NumCObsVar_LMMdl, 
                                NumDObs_LMMdl, NumDControls_LMMdl, Discount_LMMdl),
                     mDeltaT(0.1), mNoiseMean(0), mDistNoiseStd(0.1), mVelNoiseStd(0.1),
-                    mSafeDist(7), mReactionDist(25) {
+                    mSafeDist(12), mReactionDist(25) {
     mRewardParam = rewardParam;
 };
 
@@ -49,7 +49,7 @@ DState LaneMergingModel::sampleDState(const DState &q, const DControl &sigma) co
 CState LaneMergingModel::sampleCState(const DState &q_next, const CState &x_k) const {
 	CState x_next(this->getNumCStateVar());
 	
-    if (max(x_k(0), x_k(2)) > 0 && abs(x_k(0) - x_k(2)) < mSafeDist) {
+    if (!satisfyConstraints(q_next, x_k)) {
 	    x_next(0) = x_k(0);
 	    x_next(1) = x_k(1);
 	    x_next(2) = x_k(2);
@@ -78,6 +78,8 @@ CState LaneMergingModel::sampleCState(const DState &q_next, const CState &x_k) c
         printf("LaneMergingModel::sampleCState(): q_next out of domain\n");
         exit(1);
     }
+	
+//	cout << "Human input = " << humanInput << endl;
     
     if (autonomousDriver == C0) {
         autonomousInput = 0;
@@ -151,7 +153,7 @@ double LaneMergingModel::getCStateTransProb(const CState & x_next,
         exit(1);
     }
 
-    if (max(x_k(0), x_k(2)) > 0 && abs(x_k(0) - x_k(2)) < mSafeDist) {
+    if (!satisfyConstraints(q_next, x_k)) {
         difference[0] = x_next(0) - x_k(0);
         difference[1] = x_next(1) - x_k(1);
         difference[2] = x_next(2) - x_k(2);
@@ -195,7 +197,7 @@ double LaneMergingModel::getDiscreteObsProb(const DObs &zq_k, const DState &q_k)
 
 CState LaneMergingModel::getNextCStateNoNoise(const DState &q_next, const CState &x_k) const {
 	CState x_next(this->getNumCStateVar());
-	if (max(x_k(0), x_k(2)) > 0 && abs(x_k(0) - x_k(2)) < mSafeDist) {
+	if (!satisfyConstraints(q_next, x_k)) {
         x_next(0) = x_k(0);
         x_next(1) = x_k(1);
         x_next(2) = x_k(2);
@@ -246,7 +248,7 @@ CState LaneMergingModel::getNextCStateNoNoise(const DState &q_next, const CState
 
 MatrixXd LaneMergingModel::get1stDerivative(const DState &q, const CState &x) const {
     MatrixXd firstderivative(this->getNumCStateVar(), this->getNumCStateVar());
-	if (max(x(0), x(2)) > 0 && abs(x(0) - x(2)) < mSafeDist) {
+	if (!satisfyConstraints(q, x)) {
         firstderivative << 1, 0, 0, 0,
                            0, 1, 0, 0,
                            0, 0, 1, 0,
@@ -263,30 +265,22 @@ MatrixXd LaneMergingModel::get1stDerivative(const DState &q, const CState &x) co
 
 double LaneMergingModel::getReward(const DState &q, const CState &x, const DControl &sigma) const { 
     double maxReward = 1000;
-    if (max(x(0), x(2)) < 0) {
-        return 0; 
+ //   if (max(x(0), x(2)) < 0) {
+	if (x(0) + x(2) + mSafeDist < 0) {
+        return 1; 
     } else {
         if (abs(x(0) - x(2)) < mSafeDist) {
             return 0;
-        } else if (x(0) - x(2) > mSafeDist && x(0) - x(2) < mSafeDist + 1) {
-            return maxReward * (x(0) - x(2) - mSafeDist);
-        } else if (x(2) - x(0) > mSafeDist && x(2) - x(0) < mSafeDist + 1) {
-            return maxReward * (x(2) - x(0) - mSafeDist);
+        } else if (x(0) - x(2) > mSafeDist && x(0) - x(2) < mSafeDist + 3) {
+            return (maxReward + mRewardParam * x(2)) * (x(0) - x(2) - mSafeDist) / 3.0;
+        } else if (x(2) - x(0) > mSafeDist && x(2) - x(0) < mSafeDist + 3) {
+            return (maxReward + mRewardParam * x(2)) * (x(2) - x(0) - mSafeDist) / 3.0;
         } else if (x(2) > 0) {
-            return maxReward + mRewardParam * x(2) * x(2);
+            return maxReward + mRewardParam * x(2);
         }
         
         return maxReward;
     }
-    // if (max(x(0), x(2)) < 0) {
-//      return 3e5 - x(2) * x(2); // - 2.0 * mDeltaT * (sigma > 0);
-//  } else {
-//      if (abs(x(0) - x(2)) > mSafeDist) {
-//          return 3e5 - x(2) * x(2) * (x(2) < 0 ? 1: -1); // - 2.0 * mDeltaT * (sigma > 0);
-//      } else {
-//          return 0;
-//      }
-//  }
 };
 
 VectorXd LaneMergingModel::getReward1stDeri(const DState &q, const CState &x, 
@@ -294,44 +288,45 @@ VectorXd LaneMergingModel::getReward1stDeri(const DState &q, const CState &x,
     VectorXd reward1stDeri = VectorXd::Zero(this->getNumCStateVar());
     
     double maxReward = 1000;
-    if (max(x(0), x(2)) > 0) {
+ //   if (max(x(0), x(2)) > 0) {
+	if (x(0) + x(2) + mSafeDist > 0) {
         if (abs(x(0) - x(2)) < mSafeDist) {
             // do nothing
-        } else if (x(0) - x(2) > mSafeDist && x(0) - x(2) < mSafeDist + 1) {
-            reward1stDeri(0) = maxReward;
-            reward1stDeri(2) = -maxReward;
-        } else if (x(2) - x(0) > mSafeDist && x(2) - x(0) < mSafeDist + 1) {
-            reward1stDeri(0) = -maxReward;
-            reward1stDeri(2) = maxReward;
+        } else if (x(0) - x(2) > mSafeDist && x(0) - x(2) < mSafeDist + 3) {
+            reward1stDeri(0) = (maxReward + mRewardParam * x(2)) / 3.0;
+            reward1stDeri(2) = mRewardParam * (x(0) - x(2) - mSafeDist) / 3.0 - 
+				               (maxReward + mRewardParam * x(2)) / 3.0;
+        } else if (x(2) - x(0) > mSafeDist && x(2) - x(0) < mSafeDist + 3) {
+            reward1stDeri(0) = -(maxReward + mRewardParam * x(2)) / 3.0;
+            reward1stDeri(2) = mRewardParam * (x(2) - x(0) - mSafeDist) / 3.0 +
+				               (maxReward + mRewardParam * x(2)) / 3.0;
         } else if (x(2) > 0) {
-            reward1stDeri(2) = mRewardParam * x(2);
+            reward1stDeri(2) = mRewardParam;
         }
     }
 
     return reward1stDeri;
-}
+};
 
 MatrixXd LaneMergingModel::getReward2ndDeri(const DState &q, const CState &x, 
                                                              const DControl &sigma) const {
     MatrixXd Reward2ndDeri = MatrixXd::Zero(this->getNumCStateVar(), this->getNumCStateVar());
-    if (max(x(0), x(2)) > 0) {
+ //   if (max(x(0), x(2)) > 0) {
+	if (x(0) + x(2) + 7 > 0) {
         if (abs(x(0) - x(2)) < mSafeDist) {
             // do nothing
-        } else if (x(0) - x(2) > mSafeDist && x(0) - x(2) < mSafeDist + 1) {
-            // do nothing
-        } else if (x(2) - x(0) > mSafeDist && x(2) - x(0) < mSafeDist + 1) {
-            // do nothing
+        } else if (x(0) - x(2) > mSafeDist && x(0) - x(2) < mSafeDist + 3) {
+            Reward2ndDeri(0, 2) = mRewardParam / 3.0;
+			Reward2ndDeri(2, 0) = mRewardParam / 3.0;
+			Reward2ndDeri(2, 2) = -2 * mRewardParam / 3.0; 
+        } else if (x(2) - x(0) > mSafeDist && x(2) - x(0) < mSafeDist + 3) {
+            Reward2ndDeri(0, 2) = -mRewardParam / 3.0;
+			Reward2ndDeri(2, 0) = -mRewardParam / 3.0;
+			Reward2ndDeri(2, 2) = 2 * mRewardParam / 3.0;
         } else if (x(2) > 0) {
-            Reward2ndDeri(2, 2) = mRewardParam;
+            Reward2ndDeri(2, 2) = 0;
         }
     }
-    // if (max(x(0), x(2)) < 0 ) {
-//      Reward2ndDeri(2, 2) = -2;
-//  } else {
-//      if (abs(x(0) - x(2)) > mSafeDist) {
-//          Reward2ndDeri(2, 2) = -2 * (x(2) < 0 ? 1: -1);
-//      }
-//  }
 
     return Reward2ndDeri;
 };
@@ -359,6 +354,14 @@ MatrixXd LaneMergingModel::getCovMatrix(const DState &q) const {
     cov_tmp(3, 3) = mVelNoiseStd * mVelNoiseStd;
     
     return cov_tmp;
+};
+
+bool LaneMergingModel::satisfyConstraints(const DState &q, const CState &x) const {
+	if (x(0) + x(2) + mSafeDist > 0 && abs(x(0) - x(2)) < mSafeDist) {
+		return false;
+	} else {
+		return true;
+	}
 };
 
 double LaneMergingModel::sample(const DState &q_k, const CState &x_k, const DControl &sigma_k,

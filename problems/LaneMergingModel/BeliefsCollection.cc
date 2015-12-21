@@ -42,7 +42,7 @@ CState LaneMergingModelGetInitCState(const Model& currModel, const CState & x) {
 int main(int argc, char** argv) {
     
     LaneMergingModel hmshsModel;
-    int nBeliefs = 50000;
+    int nBeliefs = 100000;
     
     CState initCState(hmshsModel.getNumCStateVar());
     initCState(0) = -500;
