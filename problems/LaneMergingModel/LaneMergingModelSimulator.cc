@@ -22,7 +22,9 @@ DControl FindOptimalPolicy(const Model& currModel, const NewAlphaSet& alphaSet,
     NewAlphaSet::const_iterator minDistIterator = alphaSet.end();
     for (NewAlphaSet::const_iterator it = alphaSet.begin(); it != alphaSet.end(); it++){
         double dist = (it->mLocalx - b.cstate).norm();
-        if (dist < thresholdDist) {
+        if (dist < thresholdDist &&
+		    (currModel.satisfyConstraints(0, b.cstate) || 
+		     ~currModel.satisfyConstraints(0, it->mLocalx))) {
             double J = it->calvalue(currModel, b);
             if (J > J_star) {
                 J_star = J;
@@ -207,12 +209,11 @@ bool simulation1(const NewAlphaSet & alphaSet, int nAlphas, bool randomInit,
 	} else {
 		q_init = 6;
 		x_init(0) = -300;
-		x_init(1) = 22;
-		x_init(2) = -400;
-		x_init(3) = 25;
+		x_init(1) = 30;
+		x_init(2) = -330;
+		x_init(3) = 31;
 	}
 	
-    
 	x_k = x_init;
 	q_k = q_init;
 

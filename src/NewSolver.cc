@@ -240,7 +240,9 @@ bool CalculateAndWriteBestValueForBeliefs(char lastResultsFilePath[],
         bestalphaidx = 0;
 //        cout<<"checkpoint 2, count = " << count << endl;
         for (int j = 0; j < alphaset.size(); j++) {
-            if (getdist(it->cstate, alphaset[j].mLocalx) < thresholdDist) {
+            if (getdist(it->cstate, alphaset[j].mLocalx) < thresholdDist &&
+				    (currModel.satisfyConstraints(0, it->cstate) || 
+				     ~currModel.satisfyConstraints(0, alphaset[j].mLocalx))) {
                 value = alphaset[j].calvalue(currModel, *it);
                 if (value > bestvalue) {
                     bestvalue = value;

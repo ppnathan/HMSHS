@@ -150,7 +150,9 @@ double NewAlpha::backup(const Model& currModel, NewAlphaSet& alphaset, Belief& c
             double numalphaselected = 0;
 			CState meanx_next_wrt_opt;
             for (int j = 0; j < alphaset.size(); j++) {   // may not loop through the \alpha set
-                if (getdist(alphaset[j].mLocalx, currBelief.cstate) < thresholddist) {
+                if (getdist(alphaset[j].mLocalx, currBelief.cstate) < thresholddist &&
+				    (currModel.satisfyConstraints(0, currBelief.cstate) || 
+				     ~currModel.satisfyConstraints(0, alphaset[j].mLocalx))) {
                     numalphaselected++;
 
                     double sum_qq = 0;

@@ -17,11 +17,11 @@ const int NumDObs_LMMdl = 1;        // number of discrete observations
 const int NumDControls_LMMdl = 3;   // number of discrete controls
  
 enum { OBLIVIOUS_C0 = 0, OBLIVIOUS_C1 = 1, OBLIVIOUS_C2 = 2, 
-       IMPATIENT_C0 = 3, IMPATIENT_C1 = 4, IMPATIENT_C2 = 5, 
+       AGGRESSIVE_C0 = 3, AGGRESSIVE_C1 = 4, AGGRESSIVE_C2 = 5, 
        COURTEOUS_C0 = 6, COURTEOUS_C1 = 7, COURTEOUS_C2 = 8, 
        REASONABLE_C0 = 9, REASONABLE_C1 = 10, REASONABLE_C2 = 11}; 
 
-enum {OBLIVIOUS = 0, IMPATIENT = 1, COURTEOUS = 2, REASONABLE = 3};
+enum {OBLIVIOUS = 0, AGGRESSIVE = 1, COURTEOUS = 2, REASONABLE = 3};
 
 // sigma: C0:(u = 0); C1:(u = 1); C2:(u = -1);
 enum {C0 = 0, C1 = 1, C2 = 2}; 
@@ -29,14 +29,14 @@ enum {C0 = 0, C1 = 1, C2 = 2};
 LaneMergingModel::LaneMergingModel() : Model(NumCStateVar_LMMdl, NumDState_LMMdl, NumCObsVar_LMMdl, 
                                NumDObs_LMMdl, NumDControls_LMMdl, Discount_LMMdl),
                     mDeltaT(0.1), mNoiseMean(0), mDistNoiseStd(0.1), mVelNoiseStd(0.1),
-                    mSafeDist(12), mReactionDist(25){
+                    mSafeDist(7), mReactionDist(25){
 	mRewardParam = 0.1;
 };
 
 LaneMergingModel::LaneMergingModel(double rewardParam) : Model(NumCStateVar_LMMdl, NumDState_LMMdl, NumCObsVar_LMMdl, 
                                NumDObs_LMMdl, NumDControls_LMMdl, Discount_LMMdl),
                     mDeltaT(0.1), mNoiseMean(0), mDistNoiseStd(0.1), mVelNoiseStd(0.1),
-                    mSafeDist(12), mReactionDist(25) {
+                    mSafeDist(7), mReactionDist(25) {
     mRewardParam = rewardParam;
 };
 
@@ -64,7 +64,7 @@ CState LaneMergingModel::sampleCState(const DState &q_next, const CState &x_k) c
 
     if (humanDriver == OBLIVIOUS) {
         humanInput = 0;
-    } else if (humanDriver == IMPATIENT) {
+    } else if (humanDriver == AGGRESSIVE) {
         humanInput = abs(x_k(0) - x_k(2)) < mReactionDist ? 1 : 0;
     } else if (humanDriver == COURTEOUS) {
         humanInput = abs(x_k(0) - x_k(2)) < mReactionDist ? -1 : 0;
@@ -127,7 +127,7 @@ double LaneMergingModel::getCStateTransProb(const CState & x_next,
 
     if (humanDriver == OBLIVIOUS) {
         humanInput = 0;
-    } else if (humanDriver == IMPATIENT) {
+    } else if (humanDriver == AGGRESSIVE) {
         humanInput = abs(x_k(0) - x_k(2)) < mReactionDist ? 1 : 0;
     } else if (humanDriver == COURTEOUS) {
         humanInput = abs(x_k(0) - x_k(2)) < mReactionDist ? -1 : 0;
@@ -212,7 +212,7 @@ CState LaneMergingModel::getNextCStateNoNoise(const DState &q_next, const CState
     
     if (humanDriver == OBLIVIOUS) {
         humanInput = 0;
-    } else if (humanDriver == IMPATIENT) {
+    } else if (humanDriver == AGGRESSIVE) {
         humanInput = abs(x_k(0) - x_k(2)) < mReactionDist ? 1 : 0;
     } else if (humanDriver == COURTEOUS) {
         humanInput = abs(x_k(0) - x_k(2)) < mReactionDist ? -1 : 0;

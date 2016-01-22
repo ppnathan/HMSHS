@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
 	double rewardParam = 0.1;
     int nBeliefs = 5000;
     int maxIter = 500;
-    double thresholdDist = 5;
+    double thresholdDist = 10;
     double precision = 1e-5;
 
 	if (argc >= 2) rewardParam = atof(argv[1]);
