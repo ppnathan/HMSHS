@@ -1,0 +1,1473 @@
+-- ****************************************************************************
+--
+--  Trace file: LaneMergingSim_ControllerWithVirtualHuman_2013b.trc
+--
+--  RTI1401 7.2 (02-May-2014)
+--  Mon Mar 07 10:52:09 2016
+--
+--  Used options:
+--    TRCGenerateVirtualBlocks      = 1
+--    TRCGenerateLabels             = 1
+--    TRCGenerateStates             = 0
+--    TRCGenerateDerivatives        = 0
+--    TRCGenerateParamValues        = 1
+--    TRCGenerateApplicationKeyword = 0
+--    TRCOnlyGlobals                = 0
+--    TRCIsOmitVdOn                 = 0
+--
+--  Trace file format: 2
+--
+--  (c) Copyright 2008, dSPACE GmbH. All rights reserved.
+--
+-- ****************************************************************************
+
+-- ******** Keywords **********************************************************
+
+-- _application "LaneMergingSim_ControllerWithVirtualHuman_2013b.map"
+
+_genname     "RTI"
+_genversion  "7.2"
+_gendate     "03/07/2016 10:52:12"
+_description ""
+_author      "RTI1401 7.2 (02-May-2014)"
+_model       "LaneMergingSim_ControllerWithVirtualHuman_2013b.mdl"
+
+-- Default data type formats
+_floating_point_type(64,IEEE)
+_integer_type(32)
+
+-- No Data Capture blocks within model: use base sample time as sampling period
+sampling_period[0]
+{
+  value:       0.1
+  alias:       "HostService"
+  increment:   0.1
+  unit:        "s"
+}
+
+
+
+-- Type definitions for arrays
+typedef LaneMergingSim_ControllerWithVirtualHuman_2013b_ArrayDT0_12 flt(64,IEEE)[12]
+typedef LaneMergingSim_ControllerWithVirtualHuman_2013b_ArrayDT0_3 flt(64,IEEE)[3]
+typedef LaneMergingSim_ControllerWithVirtualHuman_2013b_ArrayDT0_2 flt(64,IEEE)[2]
+typedef LaneMergingSim_ControllerWithVirtualHuman_2013b_ArrayDT7_2 uint(32)[2]
+typedef LaneMergingSim_ControllerWithVirtualHuman_2013b_ArrayDT7_625 uint(32)[625]
+
+
+-- ******** Simulation control variables **************************************
+
+finalTime
+{
+ type:  flt(64,IEEE)*
+ alias: "finalTime"
+ desc:  "Simulation stop time. When reached, simState switches to STOP."
+ flags:  SYSTEM|READONLY
+ unit:  "s"
+}
+
+currentTime
+{
+ type:  flt(64,IEEE)*
+ alias: "currentTime"
+ desc:  "Current simulation time. Increments with execution of Timer Task 1."
+ flags: SYSTEM|READONLY
+ unit:  "s"
+}
+
+modelStepSize
+{
+ type:  flt(64,IEEE)
+ alias: "modelStepSize"
+ desc:  "Fixed step size of the model, sample time of Timer Task 1."
+ flags: SYSTEM|READONLY
+ unit:  "s"
+}
+
+simState
+{
+ type:  int(32)
+ alias: "simState"
+ desc:  "Simulation state: STOP=0 PAUSE=1 RUN=2"
+ value: 0
+ flags: SYSTEM
+ unit:  "-"
+}
+
+msg_last_error_no
+{
+ type:  uint(32)
+ alias: "errorNumber"
+ desc:  "Error number of last error message (zero if no error)."
+ unit:  "-"
+ flags: SYSTEM|READONLY
+}
+
+rtiAssertionMode
+{
+ type:  int(32)
+ alias: "rtiAssertionMode"
+ desc:  "Assertion Mode: OFF=0 WARN=1 STOP=2"
+ value: 0
+ flags: SYSTEM
+ unit:  "-"
+}
+
+
+
+-- ******** Model variables ***************************************************
+
+group "Model Root"
+{
+ flags: COLLAPSED
+}
+	group "reactiveDist" -- block-group
+	{
+	 block: "Constant"
+	 desc:  ""
+	 flags: BLOCK|COLLAPSED
+	}
+		-- Skipping output Out1
+		p_LaneMergingSim_ControllerWith_P_real_T_0[24]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "Value"
+		 value:   25.0
+		 flags:   PARAM
+		}
+
+
+	endgroup -- block-group "reactiveDist"
+
+	group "safeDist" -- block-group
+	{
+	 block: "Constant"
+	 desc:  ""
+	 flags: BLOCK|COLLAPSED
+	}
+		-- Skipping output Out1
+		p_LaneMergingSim_ControllerWith_P_real_T_0[3]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "Value"
+		 value:   7.0
+		 flags:   PARAM
+		}
+
+
+	endgroup -- block-group "safeDist"
+
+  
+  
+	group "AutonomousVehicleSimulator" -- subsystem-group
+	{
+	 flags: COLLAPSED
+	 desc:  ""
+	}
+
+		-- Skipping output x_r
+		-- Skipping output y_r
+		-- Skipping output theta_r
+		-- Skipping output v_r
+
+
+		group "u" -- block-group
+		{
+		 block: "Inport"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			p_LaneMergingSim_ControllerWith_B_real_T_0[0]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Out1"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+
+
+		endgroup -- block-group "u"
+
+		group "safeDist" -- block-group
+		{
+		 block: "Inport"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+
+
+		endgroup -- block-group "safeDist"
+
+		group "theta_ori" -- block-group
+		{
+		 block: "Constant"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[6]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Value"
+			 value:   3.1415926535897931
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "theta_ori"
+
+		group "x_ori" -- block-group
+		{
+		 block: "Constant"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[4]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Value"
+			 value:   100.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "x_ori"
+
+		group "y_ori" -- block-group
+		{
+		 block: "Constant"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[5]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Value"
+			 value:   200.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "y_ori"
+
+		group "Memory" -- block-group
+		{
+		 block: "Memory"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[0]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "X0"
+			 value:   0.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "Memory"
+
+		group "v_r_old1" -- block-group
+		{
+		 block: "Memory"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[2]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "X0"
+			 value:   31.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "v_r_old1"
+
+		group "x_r_old" -- block-group
+		{
+		 block: "Memory"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[1]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "X0"
+			 value:   -330.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "x_r_old"
+
+  
+  
+		group "MATLAB Function1" -- subsystem-group
+		{
+		 flags: COLLAPSED
+		 desc:  ""
+		}
+
+			p_LaneMergingSim_ControllerWith_B_real_T_0[19]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "x_r"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+			p_LaneMergingSim_ControllerWith_B_real_T_0[20]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "v_r"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+
+
+
+
+		endgroup -- subsystem-group "MATLAB Function1"
+  
+  
+		group "MATLAB Function3" -- subsystem-group
+		{
+		 flags: COLLAPSED
+		 desc:  ""
+		}
+
+			-- Skipping output x_g
+			-- Skipping output y_g
+			-- Skipping output theta_g
+			-- Skipping output v_g
+
+
+
+
+		endgroup -- subsystem-group "MATLAB Function3"
+
+
+	endgroup -- subsystem-group "AutonomousVehicleSimulator"
+  
+  
+	group "Controller" -- subsystem-group
+	{
+	 flags: COLLAPSED
+	 desc:  ""
+	}
+
+		p_LaneMergingSim_ControllerWith_B_real_T_0[0]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "u"
+		 desc:    ""
+		 flags:   OUTPUT|READONLY
+		}
+
+
+		group "x_r_in" -- block-group
+		{
+		 block: "Inport"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+
+
+		endgroup -- block-group "x_r_in"
+
+		group "y_r_in" -- block-group
+		{
+		 block: "Inport"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+
+
+		endgroup -- block-group "y_r_in"
+
+		group "theta_r_in" -- block-group
+		{
+		 block: "Inport"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+
+
+		endgroup -- block-group "theta_r_in"
+
+		group "v_r_in" -- block-group
+		{
+		 block: "Inport"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+
+
+		endgroup -- block-group "v_r_in"
+
+		group "reactiveDist" -- block-group
+		{
+		 block: "Inport"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+
+
+		endgroup -- block-group "reactiveDist"
+
+		group "safeDist" -- block-group
+		{
+		 block: "Inport"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+
+
+		endgroup -- block-group "safeDist"
+
+		group "q_h" -- block-group
+		{
+		 block: "Constant"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[23]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Value"
+			 value:   3.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "q_h"
+
+		group "theta_ori" -- block-group
+		{
+		 block: "Constant"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[27]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Value"
+			 value:   3.1415926535897931
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "theta_ori"
+
+		group "x_ori" -- block-group
+		{
+		 block: "Constant"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[25]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Value"
+			 value:   100.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "x_ori"
+
+		group "y_ori" -- block-group
+		{
+		 block: "Constant"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[26]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Value"
+			 value:   200.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "y_ori"
+
+		group "From File" -- block-group
+		{
+		 block: "FromFile"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+
+
+		endgroup -- block-group "From File"
+
+		group "From File1" -- block-group
+		{
+		 block: "FromFile"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+
+
+		endgroup -- block-group "From File1"
+
+		group "From File2" -- block-group
+		{
+		 block: "FromFile"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+
+
+		endgroup -- block-group "From File2"
+
+		group "From File3" -- block-group
+		{
+		 block: "FromFile"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+
+
+		endgroup -- block-group "From File3"
+
+		group "belief" -- block-group
+		{
+		 block: "Memory"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[11]
+			{
+			 type:    LaneMergingSim_ControllerWithVirtualHuman_2013b_ArrayDT0_12*
+			 alias:   "X0"
+			 value:   [0.25, 0.0, 0.0, 0.25, 0.0, 0.0, 0.25, 0.0, 0.0, 0.25, 0.0, 0.0]
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "belief"
+
+		group "d_h_mem" -- block-group
+		{
+		 block: "Memory"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[7]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "X0"
+			 value:   -300.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "d_h_mem"
+
+		group "d_r_mem" -- block-group
+		{
+		 block: "Memory"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[9]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "X0"
+			 value:   -330.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "d_r_mem"
+
+		group "sigma" -- block-group
+		{
+		 block: "Memory"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[28]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "X0"
+			 value:   1.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "sigma"
+
+		group "u_mem" -- block-group
+		{
+		 block: "Memory"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[33]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "X0"
+			 value:   0.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "u_mem"
+
+		group "v_h_mem" -- block-group
+		{
+		 block: "Memory"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[8]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "X0"
+			 value:   30.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "v_h_mem"
+
+		group "v_r_mem" -- block-group
+		{
+		 block: "Memory"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_real_T_0[10]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "X0"
+			 value:   31.0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "v_r_mem"
+
+		group "Mux" -- block-group
+		{
+		 block: "Mux"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			p_LaneMergingSim_ControllerWith_B_real_T_0[1]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Out1{SubArray1}"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+			p_LaneMergingSim_ControllerWith_B_real_T_0[2]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Out1{SubArray2}"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+			p_LaneMergingSim_ControllerWith_B_real_T_0[5]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Out1{SubArray3}"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+			p_LaneMergingSim_ControllerWith_B_real_T_0[6]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Out1{SubArray4}"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+
+
+		endgroup -- block-group "Mux"
+
+		group "Mux1" -- block-group
+		{
+		 block: "Mux"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1{SubArray1}
+			-- Skipping output Out1{SubArray2}
+			-- Skipping output Out1{SubArray3}
+			-- Skipping output Out1{SubArray4}
+
+
+		endgroup -- block-group "Mux1"
+
+		group "To File" -- block-group
+		{
+		 block: "ToFile"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+
+			-- Skipping inport In1
+
+
+
+
+		endgroup -- block-group "To File"
+
+		group "To File1" -- block-group
+		{
+		 block: "ToFile"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+
+			-- Skipping inport In1
+
+
+
+
+		endgroup -- block-group "To File1"
+
+		group "To File2" -- block-group
+		{
+		 block: "ToFile"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			p_LaneMergingSim_ControllerWith_B_real_T_0[3]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "In1"
+			 desc:    ""
+			 flags:   SINK|READONLY
+			}
+
+
+
+		endgroup -- block-group "To File2"
+
+		group "To File3" -- block-group
+		{
+		 block: "ToFile"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			p_LaneMergingSim_ControllerWith_B_real_T_0[0]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "In1"
+			 desc:    ""
+			 flags:   SINK|READONLY
+			}
+
+
+
+		endgroup -- block-group "To File3"
+
+		group "To File4" -- block-group
+		{
+		 block: "ToFile"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+
+			-- Skipping inport In1
+
+
+
+
+		endgroup -- block-group "To File4"
+
+		group "Discrete FIR Filter" -- block-group
+		{
+		 block: "DiscreteFir"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			p_LaneMergingSim_ControllerWith_B_real_T_0[0]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Out1"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+			p_LaneMergingSim_ControllerWith_P_real_T_0[29]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "InitialStates"
+			 value:   0.0
+			 flags:   PARAM
+			}
+			p_LaneMergingSim_ControllerWith_P_real_T_0[30]
+			{
+			 type:    LaneMergingSim_ControllerWithVirtualHuman_2013b_ArrayDT0_3*
+			 alias:   "Coefficients"
+			 value:   [0.33333333333333331, 0.33333333333333331, 0.33333333333333331]
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "Discrete FIR Filter"
+
+  
+  
+		group "CalBelief Subsystem" -- subsystem-group
+		{
+		 flags: COLLAPSED
+		 desc:  ""
+		}
+
+			-- Skipping output b_x_next
+			p_LaneMergingSim_ControllerWith_B_real_T_0[7]
+			{
+			 type:    LaneMergingSim_ControllerWithVirtualHuman_2013b_ArrayDT0_12*
+			 alias:   "b_q_next"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+
+
+			group "sigma" -- block-group
+			{
+			 block: "Inport"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				-- Skipping output Out1
+
+
+			endgroup -- block-group "sigma"
+
+			group "b_q" -- block-group
+			{
+			 block: "Inport"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				-- Skipping output Out1
+
+
+			endgroup -- block-group "b_q"
+
+			group "x_next" -- block-group
+			{
+			 block: "Inport"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				p_LaneMergingSim_ControllerWith_B_real_T_0[1]
+				{
+				 type:    flt(64,IEEE)*
+				 alias:   "Out1{SubArray1}"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+				p_LaneMergingSim_ControllerWith_B_real_T_0[2]
+				{
+				 type:    flt(64,IEEE)*
+				 alias:   "Out1{SubArray2}"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+				p_LaneMergingSim_ControllerWith_B_real_T_0[5]
+				{
+				 type:    flt(64,IEEE)*
+				 alias:   "Out1{SubArray3}"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+				p_LaneMergingSim_ControllerWith_B_real_T_0[6]
+				{
+				 type:    flt(64,IEEE)*
+				 alias:   "Out1{SubArray4}"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+
+
+			endgroup -- block-group "x_next"
+
+			group "xk" -- block-group
+			{
+			 block: "Inport"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				-- Skipping output Out1{SubArray1}
+				-- Skipping output Out1{SubArray2}
+				-- Skipping output Out1{SubArray3}
+				-- Skipping output Out1{SubArray4}
+
+
+			endgroup -- block-group "xk"
+
+			group "reactiveDist" -- block-group
+			{
+			 block: "Inport"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				-- Skipping output Out1
+
+
+			endgroup -- block-group "reactiveDist"
+
+			group "safeDist" -- block-group
+			{
+			 block: "Inport"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				-- Skipping output Out1
+
+
+			endgroup -- block-group "safeDist"
+
+  
+  
+			group "MATLAB Function1" -- subsystem-group
+			{
+			 flags: COLLAPSED
+			 desc:  ""
+			}
+
+				p_LaneMergingSim_ControllerWith_B_real_T_0[7]
+				{
+				 type:    LaneMergingSim_ControllerWithVirtualHuman_2013b_ArrayDT0_12*
+				 alias:   "b_q_next"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+				-- Skipping output b_x_next
+
+
+
+
+			endgroup -- subsystem-group "MATLAB Function1"
+
+
+		endgroup -- subsystem-group "CalBelief Subsystem"
+  
+  
+		group "MATLAB Function" -- subsystem-group
+		{
+		 flags: COLLAPSED
+		 desc:  ""
+		}
+
+			p_LaneMergingSim_ControllerWith_B_real_T_0[5]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "d_out"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+			p_LaneMergingSim_ControllerWith_B_real_T_0[6]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "v_out"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+
+
+
+
+		endgroup -- subsystem-group "MATLAB Function"
+  
+  
+		group "MATLAB Function2" -- subsystem-group
+		{
+		 flags: COLLAPSED
+		 desc:  ""
+		}
+
+			p_LaneMergingSim_ControllerWith_B_real_T_0[3]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "control_discrete"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+			p_LaneMergingSim_ControllerWith_B_real_T_0[4]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "u"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+
+
+
+
+		endgroup -- subsystem-group "MATLAB Function2"
+  
+  
+		group "MATLAB Function4" -- subsystem-group
+		{
+		 flags: COLLAPSED
+		 desc:  ""
+		}
+
+			p_LaneMergingSim_ControllerWith_B_real_T_0[1]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "x_h"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+			p_LaneMergingSim_ControllerWith_B_real_T_0[2]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "v_h"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+
+
+
+
+		endgroup -- subsystem-group "MATLAB Function4"
+  
+  
+		group "MATLAB Function5" -- subsystem-group
+		{
+		 flags: COLLAPSED
+		 desc:  ""
+		}
+
+			-- Skipping output q
+
+
+
+
+		endgroup -- subsystem-group "MATLAB Function5"
+
+
+	endgroup -- subsystem-group "Controller"
+  
+  
+	group "Counter\nFree-Running" -- subsystem-group
+	{
+	 flags: COLLAPSED
+	 desc:  ""
+	}
+
+		-- Skipping output y
+
+
+		group "FixPt\nData Type\nPropagation" -- block-group
+		{
+		 block: "S-Function"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			p_LaneMergingSim_ControllerWith_B_uint32_T_1[0]
+			{
+			 type:    uint(32)*
+			 alias:   "In1"
+			 desc:    ""
+			 flags:   SINK|READONLY
+			}
+			p_LaneMergingSim_ControllerWith_B_uint32_T_1[0]
+			{
+			 type:    uint(32)*
+			 alias:   "In2"
+			 desc:    ""
+			 flags:   SINK|READONLY
+			}
+			p_LaneMergingSim_ControllerWith_B_uint32_T_1[0]
+			{
+			 type:    uint(32)*
+			 alias:   "In3"
+			 desc:    ""
+			 flags:   SINK|READONLY
+			}
+
+
+
+		endgroup -- block-group "FixPt\nData Type\nPropagation"
+
+		group "Force to be scalar" -- block-group
+		{
+		 block: "SignalSpecification"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+
+
+		endgroup -- block-group "Force to be scalar"
+
+		group "Output" -- block-group
+		{
+		 block: "UnitDelay"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_LaneMergingSim_ControllerWith_P_uint32_T_1[1]
+			{
+			 type:    uint(32)*
+			 alias:   "InitialCondition"
+			 value:   0
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "Output"
+
+  
+  
+		group "Increment\nReal World" -- subsystem-group
+		{
+		 flags: COLLAPSED
+		 desc:  ""
+		}
+
+			-- Skipping output y
+
+
+			group "u" -- block-group
+			{
+			 block: "Inport"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				-- Skipping output Out1
+
+
+			endgroup -- block-group "u"
+
+			group "FixPt\nConstant" -- block-group
+			{
+			 block: "Constant"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				-- Skipping output Out1
+				p_LaneMergingSim_ControllerWith_P_uint32_T_1[0]
+				{
+				 type:    uint(32)*
+				 alias:   "Value"
+				 value:   1
+				 flags:   PARAM
+				}
+
+
+			endgroup -- block-group "FixPt\nConstant"
+
+			group "FixPt\nSum1" -- block-group
+			{
+			 block: "Sum"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				-- Skipping output Out1
+
+
+			endgroup -- block-group "FixPt\nSum1"
+
+			group "FixPt\nData Type\nDuplicate" -- block-group
+			{
+			 block: "DataTypeDuplicate"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+
+				-- Skipping inport In1
+
+
+				-- Skipping inport In2
+
+
+				-- Skipping inport In3
+
+
+
+
+			endgroup -- block-group "FixPt\nData Type\nDuplicate"
+
+
+
+		endgroup -- subsystem-group "Increment\nReal World"
+  
+  
+		group "Wrap To Zero" -- subsystem-group
+		{
+		 flags: COLLAPSED
+		 desc:  ""
+		}
+
+			p_LaneMergingSim_ControllerWith_B_uint32_T_1[0]
+			{
+			 type:    uint(32)*
+			 alias:   "Y"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+
+
+			group "U" -- block-group
+			{
+			 block: "Inport"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				-- Skipping output Out1
+
+
+			endgroup -- block-group "U"
+
+			group "Constant" -- block-group
+			{
+			 block: "Constant"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				-- Skipping output Out1
+				p_LaneMergingSim_ControllerWith_P_uint32_T_1[2]
+				{
+				 type:    uint(32)*
+				 alias:   "Value"
+				 value:   0
+				 flags:   PARAM
+				}
+
+
+			endgroup -- block-group "Constant"
+
+			group "FixPt\nSwitch" -- block-group
+			{
+			 block: "Switch"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				p_LaneMergingSim_ControllerWith_B_uint32_T_1[0]
+				{
+				 type:    uint(32)*
+				 alias:   "Out1"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+				p_LaneMergingSim_ControllerWith_P_uint32_T_1[3]
+				{
+				 type:    uint(32)*
+				 alias:   "Threshold"
+				 value:   -1
+				 flags:   PARAM
+				}
+
+
+			endgroup -- block-group "FixPt\nSwitch"
+
+			group "FixPt\nData Type\nDuplicate1" -- block-group
+			{
+			 block: "DataTypeDuplicate"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				p_LaneMergingSim_ControllerWith_B_uint32_T_1[0]
+				{
+				 type:    uint(32)*
+				 alias:   "In1"
+				 desc:    ""
+				 flags:   SINK|READONLY
+				}
+
+				-- Skipping inport In2
+
+
+				-- Skipping inport In3
+
+
+
+
+			endgroup -- block-group "FixPt\nData Type\nDuplicate1"
+
+
+
+		endgroup -- subsystem-group "Wrap To Zero"
+
+
+	endgroup -- subsystem-group "Counter\nFree-Running"
+  
+  
+	group "RTI Data" -- subsystem-group
+	{
+	 flags: COLLAPSED
+	 desc:  ""
+	}
+
+
+	endgroup -- subsystem-group "RTI Data"
+  
+  
+	group "MATLAB Function" -- subsystem-group
+	{
+	 flags: COLLAPSED
+	 desc:  ""
+	}
+
+		-- Skipping output y
+
+
+
+
+	endgroup -- subsystem-group "MATLAB Function"
+
+
+
+
+endgroup -- "Model Root"
+-- ******** Tunable Parameters ************************************************
+
+-- InlineParameters is off: no separate group for Tunable Parameters
+
+
+-- ******** State Machine Data ************************************************
+
+group "State Machine Data"
+{
+ flags: COLLAPSED
+}
+
+
+endgroup
+
+
+-- ******** Data Store Memories ***********************************************
+
+-- No Data Store Memories within the model.
+
+
+-- ******** Labels ************************************************************
+
+group "Labels"
+{
+ flags: COLLAPSED
+}
+
+endgroup
+
+-- ******** RTT Dynamic Variables *********************************************
+
+group "RTT Dynamic Variables"
+{
+ flags: COLLAPSED
+}
+
+endgroup
+
+-- ******** User variables from model_usr.trc *********************************
+
+-- RTI_USR_TRC_BEGIN
+
+-- No user file LaneMergingSim_ControllerWithVirtualHuman_2013b_usr.trc found.
+
+-- RTI_USR_TRC_END
+-- ******** Task Information variables ****************************************
+
+group "Task Info"
+{
+ flags: COLLAPSED
+}
+  group "Timer Task 1"
+  {
+   flags: COLLAPSED
+  }
+
+  pRti_TIMERA_STime
+  {
+   type:  flt(64,IEEE)*
+   alias: "sampleTime"
+   flags: SYSTEM|READONLY
+  }
+  pRti_TIMERA_TTime
+  {
+   type:  flt(64,IEEE)*
+   alias: "turnaroundTime"
+   flags: SYSTEM|READONLY
+  }
+  pRti_TIMERA_TState
+  {
+   type:  int(32)*
+   alias: "state"
+   flags: SYSTEM|READONLY
+  }
+  pRti_TIMERA_OType
+  {
+   type:  int(32)*
+   alias: "overrunCheckType"
+   flags: SYSTEM|READONLY
+  }
+  pRti_TIMERA_OMax
+  {
+   type:  int(32)*
+   alias: "overrunQueueMax"
+   flags: SYSTEM|READONLY
+  }
+  pRti_TIMERA_ORpt
+  {
+   type:  int(32)*
+   alias: "overrunQueueCount"
+   flags: SYSTEM|READONLY
+  }
+  pRti_TIMERA_OCnt
+  {
+   type:  int(32)*
+   alias: "overrunCount"
+   flags: SYSTEM|READONLY
+  }
+  pRti_TIMERA_TCnt
+  {
+   type:  flt(64,IEEE)*
+   alias: "taskCallCount"
+   flags: SYSTEM|READONLY
+  }
+  pRti_TIMERA_Prio
+  {
+   type:  int(32)*
+   alias: "priority"
+   flags: SYSTEM|READONLY
+  }
+  endgroup
+
+
+endgroup
+
+-- ******** [EOF] *************************************************************
+
+
+
