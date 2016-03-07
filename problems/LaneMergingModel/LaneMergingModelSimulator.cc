@@ -207,11 +207,11 @@ bool simulation1(const NewAlphaSet & alphaSet, int nAlphas, bool randomInit,
 		discrete_distribution<int> q_init_distribution(initQprob.begin(), initQprob.end());
 		q_init = q_init_distribution(generator);
 	} else {
-		q_init = 6;
+		q_init = 3;
 		x_init(0) = -300;
 		x_init(1) = 30;
-		x_init(2) = -330;
-		x_init(3) = 31;
+		x_init(2) = -300;
+		x_init(3) = 30;
 	}
 	
 	x_k = x_init;

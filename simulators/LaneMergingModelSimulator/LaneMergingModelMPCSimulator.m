@@ -18,8 +18,8 @@ control = zeros(SimTime+1, 1);
 MatlabSimfile_Discrete = ...
     fopen('../../problems/LaneMergingModel/OutFiles/MatlabSimfile_Discrete.txt', 'w');
 
-x_sim(1, :) = [-300 30 -330 31];
-q_sim(1, 1) = 6;
+x_sim(1, :) = [-300 30 -300 30];
+q_sim(1, 1) = 4;
 
 horizon = 60;
 
