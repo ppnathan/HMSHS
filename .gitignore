@@ -29,4 +29,5 @@
 # Others
 *.dSYM
 .DS_Store
-
+*_rti1401/
+slprj/
