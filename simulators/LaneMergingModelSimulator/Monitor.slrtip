@@ -1,0 +1,410 @@
+
+  <Object type="Desktop.Xpc.Designer.InstrumentPanel, Desktop.Xpc.Designer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="Monitor" children="Controls">
+    <Object type="System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="GroupBox2147483639" children="Controls">
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label18" children="Controls">
+        <Property name="Text">u_cont</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">6, 69</Property>
+        <Property name="Name">Label18</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="MW.Instruments.NumericDisplay, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericDisplay11" children="Controls">
+        <Property name="BindingSrcType">Signal</Property>
+        <Property name="OutputValue">0</Property>
+        <Property name="BindingSrcPath">Controller/MATLAB Function2/p2</Property>
+        <Property name="BindingSrcObject" />
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="Size">100, 25</Property>
+        <Property name="Location">6, 93</Property>
+        <Property name="Name">NumericDisplay11</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label19" children="Controls">
+        <Property name="Text">u_discrete</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">6, 17</Property>
+        <Property name="Name">Label19</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="MW.Instruments.NumericDisplay, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericDisplay12" children="Controls">
+        <Property name="BindingSrcType">Signal</Property>
+        <Property name="OutputValue">0</Property>
+        <Property name="BindingSrcPath">Controller/MATLAB Function2/p1</Property>
+        <Property name="BindingSrcObject" />
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="Size">100, 25</Property>
+        <Property name="Location">6, 41</Property>
+        <Property name="Name">NumericDisplay12</Property>
+      </Object>
+      <Property name="Text">Outputs</Property>
+      <Property name="UseCompatibleTextRendering">True</Property>
+      <Property name="Location">443, 225</Property>
+      <Property name="Name">GroupBox2147483639</Property>
+      <Property name="Size">121, 128</Property>
+    </Object>
+    <Object type="System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="GroupBox2147483640" children="Controls">
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label12" children="Controls">
+        <Property name="Text">v_r</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">6, 173</Property>
+        <Property name="Name">Label12</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="MW.Instruments.NumericDisplay, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericDisplay5" children="Controls">
+        <Property name="BindingSrcType">Signal</Property>
+        <Property name="OutputValue">0</Property>
+        <Property name="BindingSrcPath">Controller/v_r_mem</Property>
+        <Property name="BindingSrcObject" />
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="Size">100, 25</Property>
+        <Property name="Location">6, 197</Property>
+        <Property name="Name">NumericDisplay5</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label13" children="Controls">
+        <Property name="Text">d_r</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">6, 121</Property>
+        <Property name="Name">Label13</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="MW.Instruments.NumericDisplay, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericDisplay6" children="Controls">
+        <Property name="BindingSrcType">Signal</Property>
+        <Property name="OutputValue">0</Property>
+        <Property name="BindingSrcPath">Controller/d_r_mem</Property>
+        <Property name="BindingSrcObject" />
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="Size">100, 25</Property>
+        <Property name="Location">6, 145</Property>
+        <Property name="Name">NumericDisplay6</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label14" children="Controls">
+        <Property name="Text">v_h</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">6, 69</Property>
+        <Property name="Name">Label14</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="MW.Instruments.NumericDisplay, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericDisplay7" children="Controls">
+        <Property name="BindingSrcType">Signal</Property>
+        <Property name="OutputValue">0</Property>
+        <Property name="BindingSrcPath">Controller/v_h_mem</Property>
+        <Property name="BindingSrcObject" />
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="Size">100, 25</Property>
+        <Property name="Location">6, 93</Property>
+        <Property name="Name">NumericDisplay7</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label15" children="Controls">
+        <Property name="Text">d_h</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">6, 17</Property>
+        <Property name="Name">Label15</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="MW.Instruments.NumericDisplay, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericDisplay8" children="Controls">
+        <Property name="BindingSrcType">Signal</Property>
+        <Property name="OutputValue">0</Property>
+        <Property name="BindingSrcPath">Controller/d_h_mem</Property>
+        <Property name="BindingSrcObject" />
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="Size">100, 25</Property>
+        <Property name="Location">6, 41</Property>
+        <Property name="Name">NumericDisplay8</Property>
+      </Object>
+      <Property name="Text">Outputs</Property>
+      <Property name="UseCompatibleTextRendering">True</Property>
+      <Property name="Location">298, 225</Property>
+      <Property name="Name">GroupBox2147483640</Property>
+      <Property name="Size">121, 230</Property>
+    </Object>
+    <Object type="System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="GroupBox2147483641" children="Controls">
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label11" children="Controls">
+        <Property name="Text">v_r</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">6, 173</Property>
+        <Property name="Name">Label11</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="MW.Instruments.NumericDisplay, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericDisplay4" children="Controls">
+        <Property name="BindingSrcType">Signal</Property>
+        <Property name="OutputValue">0</Property>
+        <Property name="BindingSrcPath">Controller/Gain3</Property>
+        <Property name="BindingSrcObject" />
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="Size">100, 25</Property>
+        <Property name="Location">6, 197</Property>
+        <Property name="Name">NumericDisplay4</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label10" children="Controls">
+        <Property name="Text">theta_r</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">6, 121</Property>
+        <Property name="Name">Label10</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="MW.Instruments.NumericDisplay, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericDisplay3" children="Controls">
+        <Property name="BindingSrcType">Signal</Property>
+        <Property name="OutputValue">0</Property>
+        <Property name="BindingSrcPath">Controller/Gain2</Property>
+        <Property name="BindingSrcObject" />
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="Size">100, 25</Property>
+        <Property name="Location">6, 145</Property>
+        <Property name="Name">NumericDisplay3</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label9" children="Controls">
+        <Property name="Text">y_r</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">6, 69</Property>
+        <Property name="Name">Label9</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="MW.Instruments.NumericDisplay, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericDisplay2" children="Controls">
+        <Property name="BindingSrcType">Signal</Property>
+        <Property name="OutputValue">0</Property>
+        <Property name="BindingSrcPath">Controller/Gain1</Property>
+        <Property name="BindingSrcObject" />
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="Size">100, 25</Property>
+        <Property name="Location">6, 93</Property>
+        <Property name="Name">NumericDisplay2</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label8" children="Controls">
+        <Property name="Text">x_r</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">6, 17</Property>
+        <Property name="Name">Label8</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="MW.Instruments.NumericDisplay, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericDisplay1" children="Controls">
+        <Property name="BindingSrcType">Signal</Property>
+        <Property name="OutputValue">0</Property>
+        <Property name="BindingSrcPath">Controller/Gain</Property>
+        <Property name="BindingSrcObject" />
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="Size">100, 25</Property>
+        <Property name="Location">6, 41</Property>
+        <Property name="Name">NumericDisplay1</Property>
+      </Object>
+      <Property name="Text">Ego States</Property>
+      <Property name="UseCompatibleTextRendering">True</Property>
+      <Property name="Location">154, 225</Property>
+      <Property name="Name">GroupBox2147483641</Property>
+      <Property name="Size">121, 230</Property>
+    </Object>
+    <Object type="System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="LowLevel Control" children="Controls">
+      <Object type="MW.Instruments.SwitchLED, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="SwitchLED3" children="Controls">
+        <Property name="BindingSrcPath">DriverOverrideReset/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Text">Override Reset</Property>
+        <Property name="Size">106, 44</Property>
+        <Property name="Location">13, 123</Property>
+        <Property name="Name">SwitchLED3</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label7" children="Controls">
+        <Property name="Text">Manual steering value and ctrl</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">100, 68</Property>
+        <Property name="Name">Label7</Property>
+        <Property name="Size">158, 15</Property>
+      </Object>
+      <Object type="MW.Instruments.NumericEntry, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericEntry7" children="Controls">
+        <Property name="BindingSrcPath">OutputProcessing/VehicleCanProcessing/Req Steering Angle [deg]/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Size">71, 23</Property>
+        <Property name="Location">152, 84</Property>
+        <Property name="Name">NumericEntry7</Property>
+      </Object>
+      <Object type="MW.Instruments.SwitchLED, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="SwitchLED2" children="Controls">
+        <Property name="BindingSrcPath">enManSteer/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Size">37, 28</Property>
+        <Property name="Location">103, 83</Property>
+        <Property name="Name">SwitchLED2</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label6" children="Controls">
+        <Property name="Text">Manual acceleration value</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">100, 17</Property>
+        <Property name="Name">Label6</Property>
+        <Property name="Size">123, 16</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label5" children="Controls">
+        <Property name="Text">3 - Stop</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">9, 71</Property>
+        <Property name="Name">Label5</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label4" children="Controls">
+        <Property name="Text">2 - Control</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">9, 58</Property>
+        <Property name="Name">Label4</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label3" children="Controls">
+        <Property name="Text">1 - Standby</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">9, 45</Property>
+        <Property name="Name">Label3</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="MW.Instruments.NumericEntry, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericEntry8" children="Controls">
+        <Property name="BindingSrcPath">OutputProcessing/Manual_aReq/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Size">71, 23</Property>
+        <Property name="Location">152, 34</Property>
+        <Property name="Name">NumericEntry8</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label2" children="Controls">
+        <Property name="Text">0 - Disable</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">9, 32</Property>
+        <Property name="Name">Label2</Property>
+        <Property name="Size">100, 23</Property>
+      </Object>
+      <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label1" children="Controls">
+        <Property name="Text">ACC state:</Property>
+        <Property name="UseCompatibleTextRendering">True</Property>
+        <Property name="Location">9, 15</Property>
+        <Property name="Name">Label1</Property>
+        <Property name="Size">59, 18</Property>
+      </Object>
+      <Object type="MW.Instruments.SwitchLED, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="SwitchLED4" children="Controls">
+        <Property name="BindingSrcPath">OutputProcessing/enableManAx/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Size">37, 28</Property>
+        <Property name="Location">101, 30</Property>
+        <Property name="Name">SwitchLED4</Property>
+      </Object>
+      <Object type="MW.Instruments.NumericalUpDownEntry, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericalUpDownEntry1" children="Controls">
+        <Property name="BindingSrcPath">ACC_State/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Maximum">3</Property>
+        <Property name="Location">13, 94</Property>
+        <Property name="Name">NumericalUpDownEntry1</Property>
+        <Property name="Size">61, 23</Property>
+      </Object>
+      <Property name="Text">LowLevel Control</Property>
+      <Property name="UseCompatibleTextRendering">True</Property>
+      <Property name="Location">300, 22</Property>
+      <Property name="Name">LowLevel Control</Property>
+      <Property name="Size">264, 181</Property>
+    </Object>
+    <Object type="System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="GroupBox2147483642" children="Controls">
+      <Object type="MW.Instruments.NumericEntry, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericEntry6" children="Controls">
+        <Property name="BindingSrcPath">Controller/q_h/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Size">100, 23</Property>
+        <Property name="Location">6, 22</Property>
+        <Property name="Name">NumericEntry6</Property>
+      </Object>
+      <Property name="Text">Human Mode</Property>
+      <Property name="UseCompatibleTextRendering">True</Property>
+      <Property name="Location">154, 91</Property>
+      <Property name="Name">GroupBox2147483642</Property>
+      <Property name="Size">121, 61</Property>
+    </Object>
+    <Object type="System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="GroupBox2147483643" children="Controls">
+      <Object type="MW.Instruments.NumericEntry, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericEntry5" children="Controls">
+        <Property name="BindingSrcPath">Controller/theta_ori/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Size">100, 23</Property>
+        <Property name="Location">6, 22</Property>
+        <Property name="Name">NumericEntry5</Property>
+      </Object>
+      <Property name="Text">theta_origin</Property>
+      <Property name="UseCompatibleTextRendering">True</Property>
+      <Property name="Location">12, 359</Property>
+      <Property name="Name">GroupBox2147483643</Property>
+      <Property name="Size">121, 61</Property>
+    </Object>
+    <Object type="System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="GroupBox2147483644" children="Controls">
+      <Object type="MW.Instruments.NumericEntry, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericEntry4" children="Controls">
+        <Property name="BindingSrcPath">Controller/y_ori/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Size">100, 23</Property>
+        <Property name="Location">6, 22</Property>
+        <Property name="Name">NumericEntry4</Property>
+      </Object>
+      <Property name="Text">y_origin</Property>
+      <Property name="UseCompatibleTextRendering">True</Property>
+      <Property name="Location">12, 292</Property>
+      <Property name="Name">GroupBox2147483644</Property>
+      <Property name="Size">121, 61</Property>
+    </Object>
+    <Object type="System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="GroupBox2147483645" children="Controls">
+      <Object type="MW.Instruments.NumericEntry, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericEntry1" children="Controls">
+        <Property name="BindingSrcPath">Controller/x_ori/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Size">100, 23</Property>
+        <Property name="Location">6, 22</Property>
+        <Property name="Name">NumericEntry1</Property>
+      </Object>
+      <Property name="Text">x_origin</Property>
+      <Property name="UseCompatibleTextRendering">True</Property>
+      <Property name="Location">12, 225</Property>
+      <Property name="Name">GroupBox2147483645</Property>
+      <Property name="Size">121, 61</Property>
+    </Object>
+    <Object type="System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="GroupBox2147483646" children="Controls">
+      <Object type="MW.Instruments.NumericEntry, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericEntry3" children="Controls">
+        <Property name="BindingSrcPath">reactiveDist/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Size">100, 23</Property>
+        <Property name="Location">6, 22</Property>
+        <Property name="Name">NumericEntry3</Property>
+      </Object>
+      <Property name="Text">ReactiveDist</Property>
+      <Property name="UseCompatibleTextRendering">True</Property>
+      <Property name="Location">12, 91</Property>
+      <Property name="Name">GroupBox2147483646</Property>
+      <Property name="Size">121, 61</Property>
+    </Object>
+    <Object type="System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="SafeDist" children="Controls">
+      <Object type="MW.Instruments.NumericEntry, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericEntry2" children="Controls">
+        <Property name="BindingSrcPath">safeDist/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Size">100, 23</Property>
+        <Property name="Location">6, 22</Property>
+        <Property name="Name">NumericEntry2</Property>
+      </Object>
+      <Property name="Text">SafeDist</Property>
+      <Property name="UseCompatibleTextRendering">True</Property>
+      <Property name="Location">12, 158</Property>
+      <Property name="Name">SafeDist</Property>
+      <Property name="Size">121, 61</Property>
+    </Object>
+    <Object type="MW.Instruments.LED, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="LED1" children="Controls">
+      <Property name="OutputValue">0</Property>
+      <Property name="BindingSrcObject" />
+      <Property name="BindingSrcType">Signal</Property>
+      <Property name="BindingSrcPath">Gain</Property>
+      <Property name="TargetName">TargetPC1</Property>
+      <Property name="Size">50, 50</Property>
+      <Property name="Location">138, 22</Property>
+      <Property name="Name">LED1</Property>
+    </Object>
+    <Object type="MW.Instruments.SwitchLED, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="SwitchLED1" children="Controls">
+      <Property name="BindingSrcPath">Enable/Value</Property>
+      <Property name="TargetName">TargetPC1</Property>
+      <Property name="BindingSrcType">Parameter</Property>
+      <Property name="Text">Enable</Property>
+      <Property name="Size">130, 50</Property>
+      <Property name="Location">12, 22</Property>
+      <Property name="Name">SwitchLED1</Property>
+    </Object>
+    <Property name="ClientSize">1920, 1080</Property>
+  </Object>
