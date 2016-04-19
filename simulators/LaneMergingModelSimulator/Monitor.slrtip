@@ -1,5 +1,35 @@
 
   <Object type="Desktop.Xpc.Designer.InstrumentPanel, Desktop.Xpc.Designer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="Monitor" children="Controls">
+    <Object type="System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="GroupBox2147483637" children="Controls">
+      <Object type="MW.Instruments.NumericEntry, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericEntry10" children="Controls">
+        <Property name="BindingSrcPath">Controller/deccFactor/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Size">100, 23</Property>
+        <Property name="Location">6, 22</Property>
+        <Property name="Name">NumericEntry10</Property>
+      </Object>
+      <Property name="Text">DeccFactor</Property>
+      <Property name="UseCompatibleTextRendering">True</Property>
+      <Property name="Location">12, 220</Property>
+      <Property name="Name">GroupBox2147483637</Property>
+      <Property name="Size">121, 61</Property>
+    </Object>
+    <Object type="System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="GroupBox2147483638" children="Controls">
+      <Object type="MW.Instruments.NumericEntry, mwio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="NumericEntry9" children="Controls">
+        <Property name="BindingSrcPath">refSpeed/Value</Property>
+        <Property name="TargetName">TargetPC1</Property>
+        <Property name="BindingSrcType">Parameter</Property>
+        <Property name="Size">100, 23</Property>
+        <Property name="Location">6, 22</Property>
+        <Property name="Name">NumericEntry9</Property>
+      </Object>
+      <Property name="Text">RefSpeed</Property>
+      <Property name="UseCompatibleTextRendering">True</Property>
+      <Property name="Location">154, 158</Property>
+      <Property name="Name">GroupBox2147483638</Property>
+      <Property name="Size">121, 61</Property>
+    </Object>
     <Object type="System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="GroupBox2147483639" children="Controls">
       <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label18" children="Controls">
         <Property name="Text">u_cont</Property>
@@ -323,7 +353,7 @@
       </Object>
       <Property name="Text">theta_origin</Property>
       <Property name="UseCompatibleTextRendering">True</Property>
-      <Property name="Location">12, 359</Property>
+      <Property name="Location">12, 410</Property>
       <Property name="Name">GroupBox2147483643</Property>
       <Property name="Size">121, 61</Property>
     </Object>
@@ -338,7 +368,7 @@
       </Object>
       <Property name="Text">y_origin</Property>
       <Property name="UseCompatibleTextRendering">True</Property>
-      <Property name="Location">12, 292</Property>
+      <Property name="Location">12, 348</Property>
       <Property name="Name">GroupBox2147483644</Property>
       <Property name="Size">121, 61</Property>
     </Object>
@@ -353,7 +383,7 @@
       </Object>
       <Property name="Text">x_origin</Property>
       <Property name="UseCompatibleTextRendering">True</Property>
-      <Property name="Location">12, 225</Property>
+      <Property name="Location">12, 285</Property>
       <Property name="Name">GroupBox2147483645</Property>
       <Property name="Size">121, 61</Property>
     </Object>
@@ -406,5 +436,5 @@
       <Property name="Location">12, 22</Property>
       <Property name="Name">SwitchLED1</Property>
     </Object>
-    <Property name="ClientSize">1920, 1080</Property>
+    <Property name="ClientSize">1600, 900</Property>
   </Object>
